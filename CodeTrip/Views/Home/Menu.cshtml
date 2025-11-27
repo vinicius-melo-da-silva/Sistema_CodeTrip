@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="~/css/home.css" rel="stylesheet" />
+
+<header>
+    <div class="container text-center text-dark mt-5">
+        <h1 class="text-dark">Bem-vindo ao sistema da CodeTrip.</h1>
+        <h2 class="text-dark">Funcionalidades</h2>
+        <div>
+            @* <button class="btn-dark me-2">Cliente</button> *@
+            @* <button class="btn-dark me-2">Transporte</button> *@
+            @* <button class="btn-dark me-2">Hospedagem</button> *@
+            @* <button class="btn-dark me-2">Pedido</button> *@
+
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Cliente</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Hospedagem" asp-action="Index">Hospedagem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Transporte" asp-action="Index">Transporte</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Pedido" asp-action="Index">Pedido</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CodeTrip.Models.Hospedagem>
+
+<header>
+    <div class="menu">
+        <link href="~/css/crud_lista.css" rel="stylesheet" />
+        <script src="~/js/site.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <h1>Hospedagem</h1>
+    </div>
+    <div class="menu">
+        <a asp-controller="Hospedagem" asp-action="CadastrarHospedagem" class="btn btn-outline-primary">Cadastrar Hospedagem</a>
+        <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+    </div>
+</header>
+
+
+<html>
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nome_Hospedagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id_Tipo_Hospedagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id_Pensao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Logradouro_Endereco_Hospedagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Numero_Endereco_Hospedagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bairro_Endereco_Hospedagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Complemento_Endereco_Hospedagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cidade_Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UF_Estado)
+                </th>
+                <th>Acão</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome_Hospedagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id_Tipo_Hospedagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id_Pensao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Logradouro_Endereco_Hospedagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Numero_Endereco_Hospedagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bairro_Endereco_Hospedagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Complemento_Endereco_Hospedagem)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cidade_Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UF_Estado)
+                    </td>
+                    <td class="actions">
+                        @Html.ActionLink("Editar", "EditarHospedagem", new { id = item.Id_Hospedagem }, new { @class = "btn btn-sm btn-info" })
+                        |
+                        <button href="#" class="btn btn-sm btn-danger" onclick="confirmarExclusaoHospedagem(@item.Id_Hospedagem)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

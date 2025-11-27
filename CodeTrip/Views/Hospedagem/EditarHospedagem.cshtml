@@ -1,0 +1,87 @@
+﻿@model CodeTrip.Models.Hospedagem;
+
+<header>
+    <link href="~/css/crud.css" rel="stylesheet" />
+</header>
+
+
+<div class="formulario">
+    <div class="menu">
+        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <h1>Editar Hospedagem</h1>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="EditarHospedagem" method="post">
+            @*Esse token desempenha um papel crucial na prevencão de ataques de Cross-Site Request Forgery (CSRF).
+            Um ataque CSRF ocorre quando um site malicioso, um e-mail, um programa de mensagens 
+            instantâneas ou um programa induz um navegador da web de um usuário conectado a um aplicativo da web a executar uma 
+            acão indesejada naquele aplicativo. Isso pode acontecer sem o conhecimento ou consentimento do usuário.*@
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Id_Hospedagem" class="form-control" />
+                <span asp-validation-for="Id_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Nome_Hospedagem" class="control-label"></label>
+                <input asp-for="Nome_Hospedagem" class="form-control" />
+                <span asp-validation-for="Nome_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Id_Tipo_Hospedagem" class="control-label"></label>
+                <input asp-for="Id_Tipo_Hospedagem" class="form-control" />
+                <span asp-validation-for="Id_Tipo_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Id_Pensao" class="control-label"></label>
+                <input asp-for="Id_Pensao" class="form-control" />
+                <span asp-validation-for="Id_Pensao" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Logradouro_Endereco_Hospedagem" class="control-label"></label>
+                <input asp-for="Logradouro_Endereco_Hospedagem" class="form-control" />
+                <span asp-validation-for="Logradouro_Endereco_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Numero_Endereco_Hospedagem" class="control-label"></label>
+                <input asp-for="Numero_Endereco_Hospedagem" class="form-control" />
+                <span asp-validation-for="Numero_Endereco_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Bairro_Endereco_Hospedagem" class="control-label"></label>
+                <input asp-for="Bairro_Endereco_Hospedagem" class="form-control" />
+                <span asp-validation-for="Bairro_Endereco_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Complemento_Endereco_Hospedagem" class="control-label"></label>
+                <input asp-for="Complemento_Endereco_Hospedagem" class="form-control" />
+                <span asp-validation-for="Complemento_Endereco_Hospedagem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Cidade_Nome" class="control-label"></label>
+                <input asp-for="Cidade_Nome" class="form-control" />
+                <span asp-validation-for="Cidade_Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UF_Estado" class="control-label"></label>
+                <input asp-for="UF_Estado" class="form-control" />
+                <span asp-validation-for="UF_Estado" class="text-danger"></span>
+            </div>
+            <div class="botoes">
+                <input type="submit" value="Alterar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-dark">Voltar para Hospedagem</a>
+                <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+            </div>
+        </form>
+    </div>
+</div>

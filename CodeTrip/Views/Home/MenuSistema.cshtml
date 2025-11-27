@@ -1,0 +1,75 @@
+﻿<header>
+    <link href="~/css/menusistema.css" rel="stylesheet" />
+</header>
+
+<html>
+<div class="menu_superior">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Sair do Sistema</a>
+</div>
+
+<div class="menu_titulos">
+    <img src="~/src/imagens/logo.png" alt="Logo Codetrip" class="logo" />
+    <h1>Bem-vindo ao sistema da Codetrip.</h1>
+</div>
+
+<body>
+    <main class="total">
+
+        <!-- Seção de funcionalidades -->
+        <section class="funcoes">
+            <h2>Funcionalidades</h2>
+            <div class="botoes">
+                <ul>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">
+                            <img class="botao_img" src="~/src/imagens/botao_cliente.png" alt="Clientes" />
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Hospedagem" asp-action="Index">
+                            <img class="botao_img" src="~/src/imagens/botao_hospedagem.png" alt="Hospedagens" />
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Transporte" asp-action="Index">
+                            <img class="botao_img" src="~/src/imagens/botao_transporte.png" alt="Transportes" />
+                        </a>
+                    </li>
+
+                    <!-- 🔹 NOVO BOTÃO DE PASSEIO -->
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Passeio" asp-action="Index">
+                            <img class="botao_img" src="~/src/imagens/botao_passeio.png" alt="Passeios" />
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Pedido" asp-action="Index">
+                            <img class="botao_img" src="~/src/imagens/botao_pedido.png" alt="Pedidos" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção de viagens -->
+        <section class="viagens">
+            <h3>Viagens próximas ao vencimento:</h3>
+            <div class="cartoes">
+                <div class="cartao">
+                    <img src="~/src/imagens/natal.png" alt="Natal" />
+                </div>
+                <div class="cartao">
+                    <img src="~/src/imagens/Rio de Janeiro.png" alt="Rio de Janeiro" />
+                </div>
+                <div class="cartao">
+                    <img src="~/src/imagens/Recife.png" alt="Recife" />
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CodeTrip.Models.Passeio>
+
+@{
+    ViewData["Title"] = "Passeios";
+}
+
+<h1>Passeios</h1>
+
+<p>
+    <a asp-action="CadastrarPasseio" class="btn btn-primary">Cadastrar Novo Passeio</a>
+    <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Duração</th>
+            <th>Cidade</th>
+            <th>UF</th>
+            <th>Ativo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var passeio in Model)
+        {
+            <tr>
+                <td>@passeio.Nome_Passeio</td>
+                <td>@passeio.Desc_Passeio</td>
+                <td>@passeio.Valor_Passeio.ToString("C")</td>
+                <td>@passeio.Duracao_Passeio</td>
+                <td>@passeio.Cidade_Nome</td>
+                <td>@passeio.UF_Estado</td>
+                <td>@(passeio.Ativo ? "Sim" : "Não")</td>
+                <td>
+                    <a asp-action="EditarPasseio" asp-route-id="@passeio.Id_Passeio" class="btn btn-sm btn-warning">Editar</a>
+                    <a asp-action="Excluir" asp-route-id="@passeio.Id_Passeio" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Tem certeza que deseja excluir este passeio?');">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

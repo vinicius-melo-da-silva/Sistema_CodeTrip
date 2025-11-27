@@ -1,0 +1,107 @@
+﻿@model IEnumerable<CodeTrip.Models.Cliente>
+
+<header>
+    <div class="menu">
+        <link href="~/css/crud_lista.css" rel="stylesheet" />
+        <script src="~/js/site.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <h1>Cliente</h1>
+    </div>
+    <div class="menu">
+        <a asp-controller="Cliente" asp-action="CadastrarCliente" class="btn btn-outline-primary">Cadastrar Cliente</a>
+        <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+    </div>
+</header>
+
+
+<html>
+    <body>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nome_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Data_Nasc_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CPF_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Telefone_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Logradouro_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Numero_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Bairro_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Complemento_Cli)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cidade_Nome)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UF_Estado)
+                    </th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Data_Nasc_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CPF_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Telefone_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Logradouro_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Numero_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bairro_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Complemento_Cli)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cidade_Nome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UF_Estado)
+                        </td>
+                        <td class="actions">
+                            @Html.ActionLink("Editar", "EditarCliente", new { id = item.Id_Cli }, new { @class = "btn btn-sm btn-info" })
+                            |
+                        <button href="#" class="btn btn-sm btn-danger" onclick="confirmarExclusao(@item.Id_Cli)">Excluir</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </body>
+</html>

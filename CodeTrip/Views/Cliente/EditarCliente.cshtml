@@ -1,0 +1,100 @@
+﻿@model CodeTrip.Models.Cliente;
+
+<header>
+    <link href="~/css/crud.css" rel="stylesheet" />
+</header>
+
+
+<div class="formulario">
+    <div class="menu">
+        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <h1>Editar Cliente</h1>
+    </div>
+    
+    <div class="col-md-4">
+        <form asp-action="EditarCliente" method="post">
+            @*Esse token desempenha um papel crucial na prevenção de ataques de Cross-Site Request Forgery (CSRF).
+            Um ataque CSRF ocorre quando um site malicioso, um e-mail, um programa de mensagens 
+            instantâneas ou um programa induz um navegador da web de um usuário conectado a um aplicativo da web a executar uma 
+            ação indesejada naquele aplicativo. Isso pode acontecer sem o conhecimento ou consentimento do usuário.*@
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="Id_Cli" class="form-control" />
+                <span asp-validation-for="Id_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Nome_Cli" class="control-label"></label>
+                <input asp-for="Nome_Cli" class="form-control" />
+                <span asp-validation-for="Nome_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email_Cli" class="control-label"></label>
+                <input asp-for="Email_Cli" class="form-control" />
+                <span asp-validation-for="Email_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Data_Nasc_Cli" class="control-label"></label>
+                <input asp-for="Data_Nasc_Cli" type="date" class="form-control" />
+                <span asp-validation-for="Data_Nasc_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CPF_Cli" class="control-label"></label>
+                <input asp-for="CPF_Cli" class="form-control" />
+                <span asp-validation-for="CPF_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Telefone_Cli" class="control-label"></label>
+                <input asp-for="Telefone_Cli" class="form-control" />
+                <span asp-validation-for="Telefone_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Logradouro_Cli" class="control-label"></label>
+                <input asp-for="Logradouro_Cli" class="form-control" />
+                <span asp-validation-for="Logradouro_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Numero_Cli" class="control-label"></label>
+                <input asp-for="Numero_Cli" class="form-control" />
+                <span asp-validation-for="Numero_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Bairro_Cli" class="control-label"></label>
+                <input asp-for="Bairro_Cli" class="form-control" />
+                <span asp-validation-for="Bairro_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Complemento_Cli" class="control-label"></label>
+                <input asp-for="Complemento_Cli" class="form-control" />
+                <span asp-validation-for="Complemento_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Cidade_Nome" class="control-label"></label>
+                <input asp-for="Cidade_Nome" class="form-control" />
+                <span asp-validation-for="Cidade_Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UF_Estado" class="control-label"></label>
+                <input asp-for="UF_Estado" class="form-control" />
+                <span asp-validation-for="UF_Estado" class="text-danger"></span>
+            </div>
+            <div class="botoes">
+                <input type="submit" value="Alterar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-dark">Voltar para Cliente</a>
+                <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+            </div>
+        </form>
+    </div>
+</div>

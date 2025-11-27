@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CodeTrip.Models.Usuario>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link href="~/css/Login.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <img src="~/src/imagens/logo_nome.jpg" alt="Codetrip Logo" class="logo" />
+
+            <form asp-action="Login" method="post">
+                <label for="login">Login</label>
+                <input type="text" id="login" name="Email_Usuario" required />
+
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="Senha_Usuario" required />
+
+                <button type="submit" class="login-button">
+                    Entrar
+                    <span class="arrow"></span>
+                </button>
+            </form>
+
+            <div class="register-area">
+                <a asp-controller="Usuario" asp-action="Cadastro" class="register-button">
+                    Cadastrar novo usuário
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

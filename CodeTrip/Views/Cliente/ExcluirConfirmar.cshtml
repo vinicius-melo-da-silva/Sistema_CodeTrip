@@ -1,0 +1,36 @@
+﻿@model CodeTrip.Models.Cliente
+
+@{
+    ViewData["Title"] = "Confirmar Exclusão";
+}
+
+<h1>Confirmar Exclusão</h1>
+
+<h3>Tem certeza que deseja excluir este Cliente?</h3>
+<div>
+    <h4>Cliente</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id_Cli)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id_Cli)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome_Cli)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome_Cli)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CPF_Cli)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CPF_Cli)
+        </dd>
+    </dl>
+
+    @Html.ActionLink("Excluir", "ExcluirCliente", "Cliente", new { id = Model.Id_Cli }, new { @class = "btn btn-danger" }) |
+        <a asp-area="" asp-controller="Cliente" asp-action="Index" class="btn btn-outline-dark">Cancelar e Voltar para a Lista</a>
+</div>

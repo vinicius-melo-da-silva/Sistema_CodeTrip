@@ -1,0 +1,100 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Segoe UI';
+    background-color: #aecfd0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding-top: 30px;
+}
+
+.container {
+    margin: 0;
+    padding: 0;
+    }
+
+main {
+    width: 100vw;
+    padding: 0rem 2.25rem;
+}
+
+.menu {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 25px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.botoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.formulario {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction:column;
+}
+
+table {
+    font-size: 14px;
+}
+ 
+thead {
+    background-color: #05046b;
+    color: #FFF;
+}
+
+th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #EBF3F3;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #CFE2E2;
+}
+
+.btn-outline-primary {
+    color: #05046b;
+    background-color: #aecfd0;
+    border-color: #05046b;
+}
+
+    .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #05046b;
+        border-color: #05046b;
+    }
+
+.logo {
+    width: 100px;
+}
+

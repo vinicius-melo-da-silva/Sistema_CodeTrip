@@ -1,0 +1,65 @@
+﻿@model IEnumerable<CodeTrip.Models.Pedido>
+
+<header>
+    <div class="menu">
+        <link href="~/css/crud_lista.css" rel="stylesheet" />
+        <script src="~/js/site.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <h1>Pedido</h1>
+    </div>
+    <div class="menu">
+        <a asp-controller="Pedido" asp-action="CadastrarPedido" class="btn btn-outline-primary">Cadastrar Pedido</a>
+        <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+    </div>
+</header>
+
+
+<html>
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Id_Usuario)</th>
+                <th>@Html.DisplayNameFor(model => model.CPF_Cli)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_Origem)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_Destino)</th>
+                <th>@Html.DisplayNameFor(model => model.Data_Inicio)</th>
+                <th>@Html.DisplayNameFor(model => model.Data_Fim)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_Transp)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_End_Transporte)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_Hospedagem)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_Pagamento)</th>
+                <th>@Html.DisplayNameFor(model => model.Id_Passeio)</th>
+                <th>@Html.DisplayNameFor(model => model.Ativo)</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Usuario)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CPF_Cli)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Origem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Destino)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Data_Inicio)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Data_Fim)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Transp)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_End_Transporte)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Hospedagem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Pagamento)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Id_Passeio)</td>
+                    <td>@(item.Ativo ? "Sim" : "Não")</td>
+                    <td class="actions">
+                        @Html.ActionLink("Editar", "EditarPedido", new { id = item.Id_Pedido }, new { @class = "btn btn-sm btn-info" })
+                        |
+                        <button href="#" class="btn btn-sm btn-danger" onclick="confirmarExclusaoPedido(@item.Id_Pedido)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

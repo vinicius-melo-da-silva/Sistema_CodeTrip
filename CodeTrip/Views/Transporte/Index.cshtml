@@ -1,0 +1,53 @@
+﻿@model IEnumerable<CodeTrip.Models.Transporte>
+
+<header>
+    <div class="menu">
+        <link href="~/css/crud_lista.css" rel="stylesheet" />
+        <script src="~/js/site.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <h1>Transporte</h1>
+    </div>
+    <div class="menu">
+        <a asp-controller="Transporte" asp-action="CadastrarTransporte" class="btn btn-outline-primary">Cadastrar Transporte</a>
+        <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+    </div>
+</header>
+
+
+<html>
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo_Transp)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UF_Estado)
+                </th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo_Transp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UF_Estado)
+                    </td>
+                    <td class="actions">
+                        @Html.ActionLink("Editar", "EditarTransporte", new { id = item.Id_Transp }, new { @class = "btn btn-sm btn-info" })
+                        |
+                        <button href="#" class="btn btn-sm btn-danger" onclick="confirmarExclusaoTransporte(@item.Id_Transp)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
