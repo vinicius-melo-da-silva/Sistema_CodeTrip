@@ -15,24 +15,23 @@
     </div>
 </header>
 
-
 <html>
 <body>
     <table class="table">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(model => model.Id_Usuario)</th>
-                <th>@Html.DisplayNameFor(model => model.CPF_Cli)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_Origem)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_Destino)</th>
-                <th>@Html.DisplayNameFor(model => model.Data_Inicio)</th>
-                <th>@Html.DisplayNameFor(model => model.Data_Fim)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_Transp)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_End_Transporte)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_Hospedagem)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_Pagamento)</th>
-                <th>@Html.DisplayNameFor(model => model.Id_Passeio)</th>
-                <th>@Html.DisplayNameFor(model => model.Ativo)</th>
+                <th>Usuário</th>
+                <th>Cliente</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Transporte</th>
+                <th>Endereço Transporte</th>
+                <th>Hospedagem</th>
+                <th>Pagamento</th>
+                <th>Passeio</th>
+                <th>Ativo</th>
                 <th>Ação</th>
             </tr>
         </thead>
@@ -40,17 +39,17 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Usuario)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CPF_Cli)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Origem)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Destino)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Data_Inicio)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Data_Fim)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Transp)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_End_Transporte)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Hospedagem)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Pagamento)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Id_Passeio)</td>
+                    <td>@item.Nome_Usuario</td>
+                    <td>@($"{item.CPF_Cli} - {item.Nome_Cliente}")</td>
+                    <td>@($"{item.Id_Origem} - {item.Desc_Origem}")</td>
+                    <td>@($"{item.Id_Destino} - {item.Desc_Destino}")</td>
+                    <td>@item.Data_Inicio.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Data_Fim.ToString("dd/MM/yyyy")</td>
+                    <td>@($"{item.Id_Transp} - {item.Desc_Transp}")</td>
+                    <td>@($"{item.Id_End_Transporte} - {item.Desc_End_Transporte}")</td>
+                    <td>@($"{item.Id_Hospedagem} - {item.Desc_Hospedagem}")</td>
+                    <td>@($"{item.Id_Pagamento} - {item.Desc_Pagamento}")</td>
+                    <td>@($"{item.Id_Passeio} - {item.Desc_Passeio}")</td>
                     <td>@(item.Ativo ? "Sim" : "Não")</td>
                     <td class="actions">
                         @Html.ActionLink("Editar", "EditarPedido", new { id = item.Id_Pedido }, new { @class = "btn btn-sm btn-info" })

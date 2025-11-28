@@ -4,36 +4,49 @@
     <link href="~/css/crud.css" rel="stylesheet" />
 </header>
 
-
 <div class="formulario">
     <div class="menu">
         <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
         <h1>Editar Pedido</h1>
     </div>
     <div class="col-md-4">
-        <form asp-action="EditarPedido" method="post">
-            @*Esse token desempenha um papel crucial na prevenção de ataques de Cross-Site Request Forgery (CSRF).
-            Um ataque CSRF ocorre quando um site malicioso, um e-mail, um programa de mensagens 
-            instantâneas ou um programa induz um navegador da web de um usuário conectado a um aplicativo da web a executar uma 
-            ação indesejada naquele aplicativo. Isso pode acontecer sem o conhecimento ou consentimento do usuário.*@
+        <form asp-action="EditarPedido" method="post" class="form-prod">
             @Html.AntiForgeryToken()
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <input type="hidden" asp-for="Id_Pedido" class="form-control" />
-                <span asp-validation-for="Id_Pedido" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="Id_Pedido" />
 
             <div class="form-group">
-                <label asp-for="Id_Usuario" class="control-label"></label>
-                <input asp-for="Id_Usuario" class="form-control" />
+                <label for="Id_Usuario">Usuário:</label>
+                <select name="Id_Usuario" id="Id_Usuario" class="form-select" asp-items="@ViewBag.Usuarios">
+                    <option value="">-- Selecione um usuário --</option>
+                </select>
                 <span asp-validation-for="Id_Usuario" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="CPF_Cli" class="control-label"></label>
-                <input asp-for="CPF_Cli" class="form-control" />
+                <label for="CPF_Cli">Cliente:</label>
+                <select name="CPF_Cli" id="CPF_Cli" class="form-select" asp-items="@ViewBag.Clientes">
+                    <option value="">-- Selecione um cliente --</option>
+                </select>
                 <span asp-validation-for="CPF_Cli" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Id_Origem">Origem:</label>
+                <select name="Id_Origem" id="Id_Origem" class="form-select" asp-items="@ViewBag.Origens">
+                    <option value="">-- Selecione a Origem --</option>
+                </select>
+                <span asp-validation-for="Id_Origem" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Id_Destino">Destino:</label>
+                <select name="Id_Destino" id="Id_Destino" class="form-select" asp-items="@ViewBag.Destinos">
+                    <option value="">-- Selecione o Destino --</option>
+                </select>
+                <span asp-validation-for="Id_Destino" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -49,45 +62,43 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_Transp" class="control-label"></label>
-                <input asp-for="Id_Transp" class="form-control" />
+                <label for="Id_Transp">Transporte:</label>
+                <select name="Id_Transp" id="Id_Transp" class="form-select" asp-items="@ViewBag.Transportes">
+                    <option value="">-- Selecione um Transporte --</option>
+                </select>
                 <span asp-validation-for="Id_Transp" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_End_Transporte" class="control-label"></label>
-                <input asp-for="Id_End_Transporte" class="form-control" />
+                <label for="Id_End_Transporte">Endereço Transporte:</label>
+                <select name="Id_End_Transporte" id="Id_End_Transporte" class="form-select" asp-items="@ViewBag.End_Transportes">
+                    <option value="">-- Selecione um Endereço --</option>
+                </select>
                 <span asp-validation-for="Id_End_Transporte" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_Hospedagem" class="control-label"></label>
-                <input asp-for="Id_Hospedagem" class="form-control" />
+                <label for="Id_Hospedagem">Hospedagem:</label>
+                <select name="Id_Hospedagem" id="Id_Hospedagem" class="form-select" asp-items="@ViewBag.Hospedagens">
+                    <option value="">-- Selecione uma Hospedagem --</option>
+                </select>
                 <span asp-validation-for="Id_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_Pagamento" class="control-label"></label>
-                <input asp-for="Id_Pagamento" class="form-control" />
-                <span asp-validation-for="Id_Pagamento" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Id_Origem" class="control-label"></label>
-                <input asp-for="Id_Origem" class="form-control" />
-                <span asp-validation-for="Id_Origem" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Id_Destino" class="control-label"></label>
-                <input asp-for="Id_Destino" class="form-control" />
-                <span asp-validation-for="Id_Destino" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Id_Passeio" class="control-label"></label>
-                <input asp-for="Id_Passeio" class="form-control" />
+                <label for="Id_Passeio">Passeio:</label>
+                <select name="Id_Passeio" id="Id_Passeio" class="form-select" asp-items="@ViewBag.Passeios">
+                    <option value="">-- Selecione o Passeio --</option>
+                </select>
                 <span asp-validation-for="Id_Passeio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Id_Pagamento">Pagamento:</label>
+                <select name="Id_Pagamento" id="Id_Pagamento" class="form-select" asp-items="@ViewBag.Pagamentos">
+                    <option value="">-- Selecione um tipo de Pagamento --</option>
+                </select>
+                <span asp-validation-for="Id_Pagamento" class="text-danger"></span>
             </div>
 
             <div class="form-check">
