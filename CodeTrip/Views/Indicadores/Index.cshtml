@@ -1,0 +1,191 @@
+﻿<header>
+    <link href="~/css/Indicadores.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</header>
+
+@model CodeTrip.Models.Indicadores
+@{
+    ViewData["Title"] = "Dashboard - Indicadores";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Dashboard - Indicadores</h1>
+        <div>
+            <a href="@Url.Action("ExportarPDF")" class="btn btn-danger me-2">
+                <i class="fas fa-file-pdf"></i> Exportar PDF
+            </a>
+            <a href="@Url.Action("ExportarExcel")" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Exportar Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Receita Total</h5>
+                    <h2 class="card-text">R$ @Model.ReceitaTotal.ToString("N2")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes Ativos</h5>
+                    <h2 class="card-text">@Model.ClientesAtivos</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Clientes Inativos</h5>
+                    <h2 class="card-text">@Model.ClientesInativos</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Total Clientes</h5>
+                    <h2 class="card-text">@(Model.ClientesAtivos + Model.ClientesInativos)</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Gráfico de Viagens por Mês -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Viagens por Mês</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoViagensMes" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Viagens por Dia -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Viagens por Dia (Últimos 30 dias)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoViagensDia" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Rankings -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Top 5 Destinos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach (var destino in Model.DestinosMaisVendidos)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                @destino.Destino
+                                <span class="badge bg-primary rounded-pill">@destino.Quantidade</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top 5 Passeios</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach (var passeio in Model.PasseiosMaisVendidos)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                @passeio.Passeio
+                                <span class="badge bg-success rounded-pill">@passeio.Quantidade</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dados do gráfico mensal
+        var viagensPorMes = @Html.Raw(Json.Serialize(Model.ViagensPorMes));
+        var viagensPorDia = @Html.Raw(Json.Serialize(Model.ViagensPorDia));
+
+        // Gráfico de Viagens por Mês
+        var ctxMes = document.getElementById('graficoViagensMes').getContext('2d');
+        var chartMes = new Chart(ctxMes, {
+            type: 'bar',
+            data: {
+                labels: viagensPorMes.map(function(item) { return item.mes; }),
+                datasets: [{
+                    label: 'Viagens',
+                    data: viagensPorMes.map(function(item) { return item.quantidade; }),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Viagens por Dia
+        var ctxDia = document.getElementById('graficoViagensDia').getContext('2d');
+        var chartDia = new Chart(ctxDia, {
+            type: 'line',
+            data: {
+                labels: viagensPorDia.map(function(item) { return item.data; }).reverse(),
+                datasets: [{
+                    label: 'Viagens por Dia',
+                    data: viagensPorDia.map(function(item) { return item.quantidade; }).reverse(),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

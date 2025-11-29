@@ -11,6 +11,7 @@ builder.Services.AddScoped<PedidoRepositorio>();
 builder.Services.AddScoped<TransporteRepositorio>();
 builder.Services.AddScoped<UsuarioRepositorio>();
 builder.Services.AddScoped<PasseioRepositorio>();
+builder.Services.AddScoped<IndicadoresRepositorio>();
 
 var app = builder.Build();
 

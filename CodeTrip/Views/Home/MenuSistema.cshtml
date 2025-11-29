@@ -1,75 +1,144 @@
 ﻿<header>
     <link href="~/css/menusistema.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </header>
 
-<html>
-<div class="menu_superior">
-    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Sair do Sistema</a>
-</div>
+<html lang="pt-BR">
 
-<div class="menu_titulos">
-    <img src="~/src/imagens/logo.png" alt="Logo Codetrip" class="logo" />
-    <h1>Bem-vindo ao sistema da Codetrip.</h1>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema CodeTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 
 <body>
-    <main class="total">
-
-        <!-- Seção de funcionalidades -->
-        <section class="funcoes">
-            <h2>Funcionalidades</h2>
-            <div class="botoes">
-                <ul>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">
-                            <img class="botao_img" src="~/src/imagens/botao_cliente.png" alt="Clientes" />
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Hospedagem" asp-action="Index">
-                            <img class="botao_img" src="~/src/imagens/botao_hospedagem.png" alt="Hospedagens" />
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Transporte" asp-action="Index">
-                            <img class="botao_img" src="~/src/imagens/botao_transporte.png" alt="Transportes" />
-                        </a>
-                    </li>
-
-                    <!-- 🔹 NOVO BOTÃO DE PASSEIO -->
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Passeio" asp-action="Index">
-                            <img class="botao_img" src="~/src/imagens/botao_passeio.png" alt="Passeios" />
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Pedido" asp-action="Index">
-                            <img class="botao_img" src="~/src/imagens/botao_pedido.png" alt="Pedidos" />
-                        </a>
-                    </li>
-                </ul>
+    <!-- Menu Fixo Superior -->
+    <div class="menu-fixo">
+        <div class="menu-superior">
+            <div class="logo-container">
+                <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip">
+                <div class="sistema-titulo">Sistema de Gestão</div>
             </div>
-        </section>
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-sign-out-alt"></i> Sair do Sistema
+            </a>
+        </div>
+    </div>
 
-        <!-- Seção de viagens -->
-        <section class="viagens">
-            <h3>Viagens próximas ao vencimento:</h3>
-            <div class="cartoes">
-                <div class="cartao">
-                    <img src="~/src/imagens/natal.png" alt="Natal" />
-                </div>
-                <div class="cartao">
-                    <img src="~/src/imagens/Rio de Janeiro.png" alt="Rio de Janeiro" />
-                </div>
-                <div class="cartao">
-                    <img src="~/src/imagens/Recife.png" alt="Recife" />
-                </div>
+    <!-- Seção Hero -->
+    <section class="hero">
+        <h1>Explore o Mundo com a CodeTrip</h1>
+        <p>Destinos inteligentes, experiências inesquecíveis. Oferecemos os melhores serviços para tornar sua viagem perfeita.</p>
+        <div class="hero-buttons">
+            <a asp-area="" asp-controller="Pedido" asp-action="CadastrarPedido" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Nova Viagem
+            </a>
+        </div>
+    </section>
+
+    <!-- Seção de Funcionalidades -->
+    <section class="funcionalidades">
+        <h2>Funcionalidades do Sistema</h2>
+        <div class="botoes-grid">
+            <div class="funcionalidade-card">
+                <i class="fas fa-users"></i>
+                <h3>Gestão de Clientes</h3>
+                <p>Sistema completo para cadastro e gerenciamento de clientes, mantendo todas as informações organizadas.</p>
+                <a asp-area="" asp-controller="Cliente" asp-action="Index" class="btn-card">Acessar</a>
             </div>
-        </section>
 
-    </main>
+            <div class="funcionalidade-card">
+                <i class="fas fa-hotel"></i>
+                <h3>Hospedagens</h3>
+                <p>Controle completo de hospedagens, tipos de acomodação e serviços oferecidos aos clientes.</p>
+                <a asp-area="" asp-controller="Hospedagem" asp-action="Index" class="btn-card">Acessar</a>
+            </div>
+
+            <div class="funcionalidade-card">
+                <i class="fas fa-bus"></i>
+                <h3>Transportes</h3>
+                <p>Gerencie diferentes tipos de transporte com preços, capacidades e disponibilidade para suas viagens.</p>
+                <a asp-area="" asp-controller="Transporte" asp-action="Index" class="btn-card">Acessar</a>
+            </div>
+
+            <div class="funcionalidade-card">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Passeios</h3>
+                <p>Organize e gerencie passeios e excursões com informações detalhadas e valores.</p>
+                <a asp-area="" asp-controller="Passeio" asp-action="Index" class="btn-card">Acessar</a>
+            </div>
+
+            <div class="funcionalidade-card">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Pedidos</h3>
+                <p>Controle completo de pedidos, desde a criação até o acompanhamento do status de cada viagem.</p>
+                <a asp-area="" asp-controller="Pedido" asp-action="Index" class="btn-card">Acessar</a>
+            </div>
+
+            <div class="funcionalidade-card">
+                <i class="fas fa-chart-bar"></i>
+                <h3>Indicadores</h3>
+                <p>Acompanhe métricas importantes, relatórios e desempenho do seu negócio em tempo real.</p>
+                <a asp-area="" asp-controller="Indicadores" asp-action="Index" class="btn-card">Acessar</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Números -->
+    <section class="numeros">
+        <h2>Nossos Números</h2>
+        <div class="numeros-grid">
+            <div class="numero-card">
+                <i class="fas fa-users"></i>
+                <div class="numero">500+</div>
+                <p>Clientes Satisfeitos</p>
+            </div>
+            <div class="numero-card">
+                <i class="fas fa-plane"></i>
+                <div class="numero">1.200+</div>
+                <p>Viagens Realizadas</p>
+            </div>
+            <div class="numero-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="numero">50+</div>
+                <p>Destinos</p>
+            </div>
+            <div class="numero-card">
+                <i class="fas fa-star"></i>
+                <div class="numero">4.9</div>
+                <p>Avaliação Média</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Entre em Contato</h3>
+                <p><i class="fas fa-phone"></i> (11) 99163-3791</p>
+                <p><i class="fas fa-envelope"></i> codetrip.d04@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Av. Brig. Faria Lima, 1336 - 5º andar<br>Jardim Paulistano, São Paulo - SP</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Agência CodeTrip</h3>
+                <p>
+                    Sistema completo de gerenciamento para agências de viagens, oferecendo controle total sobre clientes, viagens e transportes.
+                    Permite o acompanhamento de pedidos, integração com origens e destinos e gestão detalhada de usuários.
+                    Facilita o processo de criação, edição e monitoramento de roteiros, garantindo maior agilidade e organização.
+                    Suporte a relatórios, automação de processos e análise estratégica para tomada de decisões eficientes..
+                </p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 Agência de Viagens CodeTrip. Todos os direitos reservados.</p>
+            <p>Desenvolvido com <i class="fas fa-heart" style="color: #ef4444;"></i> usando ASP.NET Core</p>
+        </div>
+    </footer>
 </body>
+
 </html>

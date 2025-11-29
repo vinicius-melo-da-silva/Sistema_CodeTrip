@@ -1,64 +1,602 @@
 ﻿@model IEnumerable<CodeTrip.Models.Pedido>
 
-<header>
-    <div class="menu">
-        <link href="~/css/crud_lista.css" rel="stylesheet" />
-        <script src="~/js/site.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
-        <h1>Pedido</h1>
-    </div>
-    <div class="menu">
-        <a asp-controller="Pedido" asp-action="CadastrarPedido" class="btn btn-outline-primary">Cadastrar Pedido</a>
-        <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
-    </div>
-</header>
+@{
+    ViewData["Title"] = "Lista de Pedidos";
+}
 
-<html>
-<body>
-    <table class="table">
-        <thead>
+<h2>Lista de Pedidos</h2>
+
+<div class="mb-3">
+    <a asp-action="CadastrarPedido" class="btn btn-primary">Cadastrar Novo Pedido</a>
+    <a asp-controller="Home" asp-action="MenuSistema" class="btn btn-secondary">Voltar ao Menu Principal</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuário</th>
+            <th>Cliente</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Data Início</th>
+            <th>Data Fim</th>
+            <th>Ativo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>Usuário</th>
-                <th>Cliente</th>
-                <th>Origem</th>
-                <th>Destino</th>
-                <th>Data Início</th>
-                <th>Data Fim</th>
-                <th>Transporte</th>
-                <th>Endereço Transporte</th>
-                <th>Hospedagem</th>
-                <th>Pagamento</th>
-                <th>Passeio</th>
-                <th>Ativo</th>
-                <th>Ação</th>
+                <td>@item.Id_Pedido</td>
+                <td>@item.Id_Usuario</td>
+                <td>@item.CPF_Cli</td>
+                <td>@item.Id_Origem</td>
+                <td>@item.Id_Destino</td>
+                <td>@(item.Data_Inicio?.ToString("yyyy-MM-dd"))</td>
+                <td>@(item.Data_Fim?.ToString("yyyy-MM-dd"))</td>
+                <td>@(item.Ativo ? "Sim" : "Não")</td>
+                <td>
+                    <a asp-action="EditarPedido" asp-route-id="@item.Id_Pedido" class="btn btn-warning btn-sm">Editar</a>
+
+                    <a asp-action="ExcluirPedido"
+                       asp-route-id="@item.Id_Pedido"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Tem certeza que deseja excluir este pedido?');">
+                        Excluir
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Nome_Usuario</td>
-                    <td>@($"{item.CPF_Cli} - {item.Nome_Cliente}")</td>
-                    <td>@($"{item.Id_Origem} - {item.Desc_Origem}")</td>
-                    <td>@($"{item.Id_Destino} - {item.Desc_Destino}")</td>
-                    <td>@item.Data_Inicio.ToString("dd/MM/yyyy")</td>
-                    <td>@item.Data_Fim.ToString("dd/MM/yyyy")</td>
-                    <td>@($"{item.Id_Transp} - {item.Desc_Transp}")</td>
-                    <td>@($"{item.Id_End_Transporte} - {item.Desc_End_Transporte}")</td>
-                    <td>@($"{item.Id_Hospedagem} - {item.Desc_Hospedagem}")</td>
-                    <td>@($"{item.Id_Pagamento} - {item.Desc_Pagamento}")</td>
-                    <td>@($"{item.Id_Passeio} - {item.Desc_Passeio}")</td>
-                    <td>@(item.Ativo ? "Sim" : "Não")</td>
-                    <td class="actions">
-                        @Html.ActionLink("Editar", "EditarPedido", new { id = item.Id_Pedido }, new { @class = "btn btn-sm btn-info" })
-                        |
-                        <button href="#" class="btn btn-sm btn-danger" onclick="confirmarExclusaoPedido(@item.Id_Pedido)">Excluir</button>
-                    </td>
-                </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    <style >
+    /* ===== ESTILOS ESPECÍFICOS PARA PÁGINAS DE PEDIDOS ===== */
+    .pagina-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .titulo-pagina {
+        color: var(--primary-blue);
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        font-weight: 700;
+        text-align: center;
+        position: relative;
+    }
+
+        .titulo-pagina::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-green) 100%);
+            border-radius: 2px;
+        }
+
+    /* ===== BARRA DE AÇÕES ===== */
+    .barra-acoes {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    /* ===== TABELA ESTILIZADA ===== */
+    .tabela-container {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .tabela-pedidos {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+        .tabela-pedidos thead {
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--white);
+        }
+
+        .tabela-pedidos th {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .tabela-pedidos tbody tr {
+            border-bottom: 1px solid var(--gray-medium);
+            transition: all 0.3s ease;
+        }
+
+            .tabela-pedidos tbody tr:hover {
+                background: var(--light-blue);
+                transform: translateY(-2px);
+                box-shadow: var(--shadow);
             }
-        </tbody>
-    </table>
-</body>
-</html>
+
+        .tabela-pedidos td {
+            padding: 1rem;
+            color: var(--text-dark);
+        }
+
+    /* ===== BADGES DE STATUS ===== */
+    .badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        border: 2px solid transparent;
+    }
+
+    .badge-ativo {
+        background: var(--light-green);
+        color: var(--accent-green);
+        border-color: var(--accent-green);
+    }
+
+    .badge-inativo {
+        background: #fee2e2;
+        color: #dc2626;
+        border-color: #dc2626;
+    }
+
+    /* ===== BOTÕES DE AÇÃO ===== */
+    .botoes-acao {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        border: 2px solid transparent;
+    }
+
+    .btn-warning {
+        background: #f59e0b;
+        color: var(--white);
+        border-color: #d97706;
+    }
+
+        .btn-warning:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+    .btn-danger {
+        background: #dc2626;
+        color: var(--white);
+        border-color: #b91c1c;
+    }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+    /* ===== FORMULÁRIOS ===== */
+    .formulario-container {
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid var(--gray-medium);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: var(--white);
+    }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+    /* ===== ESTILOS ESPECÍFICOS PARA VIEWBAGS (SELECTS) ===== */
+    select.form-control {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%231e40af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: pointer;
+    }
+
+        /* Cores e bordas específicas para diferentes ViewBags */
+        select.form-control option {
+            background: var(--white);
+            color: var(--text-dark);
+            padding: 0.5rem;
+        }
+
+        /* Estilo quando há opções selecionadas */
+        select.form-control:valid {
+            border-color: var(--accent-green);
+            background-color: var(--light-green);
+        }
+
+        select.form-control option:checked {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        select.form-control option:hover {
+            background: var(--light-blue) !important;
+            color: var(--primary-blue);
+        }
+
+    /* ===== ESTILOS DIFERENCIADOS PARA CADA TIPO DE VIEWBAG ===== */
+    /* ViewBag de Usuários */
+    select[name="Id_Usuario"] {
+        border-left: 4px solid var(--primary-blue);
+    }
+
+        select[name="Id_Usuario"]:focus {
+            border-left-color: var(--accent-green);
+        }
+
+    /* ViewBag de Clientes */
+    select[name="CPF_Cli"] {
+        border-left: 4px solid var(--accent-green);
+    }
+
+        select[name="CPF_Cli"]:focus {
+            border-left-color: var(--primary-blue);
+        }
+
+    /* ViewBag de Origem/Destino */
+    select[name="Id_Origem"],
+    select[name="Id_Destino"] {
+        border-left: 4px solid var(--secondary-blue);
+    }
+
+        select[name="Id_Origem"]:focus,
+        select[name="Id_Destino"]:focus {
+            border-left-color: var(--accent-green);
+        }
+
+    /* ViewBag de Transporte */
+    select[name="Id_Transp"] {
+        border-left: 4px solid #f59e0b;
+    }
+
+        select[name="Id_Transp"]:focus {
+            border-left-color: var(--primary-blue);
+        }
+
+    /* ViewBag de Hospedagem */
+    select[name="Id_Hospedagem"] {
+        border-left: 4px solid #8b5cf6;
+    }
+
+        select[name="Id_Hospedagem"]:focus {
+            border-left-color: var(--accent-green);
+        }
+
+    /* ViewBag de Pagamento */
+    select[name="Id_Pagamento"] {
+        border-left: 4px solid #10b981;
+    }
+
+        select[name="Id_Pagamento"]:focus {
+            border-left-color: var(--primary-blue);
+        }
+
+    /* ViewBag de Passeio */
+    select[name="Id_Passeio"] {
+        border-left: 4px solid #f97316;
+    }
+
+        select[name="Id_Passeio"]:focus {
+            border-left-color: var(--secondary-blue);
+        }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: var(--gray-light);
+        border-radius: 8px;
+        border: 2px solid var(--gray-medium);
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+        .form-check-input:checked {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+    .form-check-label {
+        margin: 0;
+        color: var(--text-dark);
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    /* ===== GRUPO DE BOTÕES DO FORMULÁRIO ===== */
+    .grupo-botoes {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid var(--gray-medium);
+        flex-wrap: wrap;
+    }
+
+    /* ===== MODAL DE CONFIRMAÇÃO ===== */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+    }
+
+    .modal-content {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        border: 3px solid var(--accent-green);
+    }
+
+    .modal-botoes {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    /* ===== ESTADOS VAZIOS ===== */
+    .estado-vazio {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: var(--gray-dark);
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        border: 2px dashed var(--gray-medium);
+    }
+
+        .estado-vazio i {
+            font-size: 4rem;
+            color: var(--gray-medium);
+            margin-bottom: 1rem;
+        }
+
+        .estado-vazio h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+
+    .tabela-pedidos {
+        min-width: 900px;
+    }
+
+    }
+
+    .titulo-pagina {
+        font-size: 2rem;
+    }
+
+    .barra-acoes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+        .barra-acoes .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+    .formulario-container {
+        padding: 1.5rem;
+    }
+
+    .grupo-botoes {
+        flex-direction: column;
+    }
+
+        .grupo-botoes .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+    }
+
+    .botoes-acao {
+        flex-direction: column;
+    }
+
+    .btn-sm {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-control {
+        padding: 0.7rem 0.8rem;
+    }
+
+    }
+
+    }
+
+    .tabela-pedidos tbody tr {
+        animation: slideIn 0.3s ease-out;
+    }
+
+        .tabela-pedidos tbody tr:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .tabela-pedidos tbody tr:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .tabela-pedidos tbody tr:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .tabela-pedidos tbody tr:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .tabela-pedidos tbody tr:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+    /* ===== ESTILOS PARA CAMPOS DE DATA ===== */
+    input[type="date"] {
+        position: relative;
+        cursor: pointer;
+    }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
+        input[type="date"]:valid {
+            border-color: var(--accent-green);
+            background-color: var(--light-green);
+        }
+
+    }
+
+    /* ===== ESTILOS PARA FOCO ===== */
+    .btn:focus,
+    .form-control:focus,
+    .form-check-input:focus {
+        outline: 2px solid var(--secondary-blue);
+        outline-offset: 2px;
+    }
+
+    /* ===== BOTÕES PRIMÁRIOS E SECUNDÁRIOS ===== */
+    .btn-primary {
+        background: var(--accent-green);
+        color: var(--white);
+        border: 2px solid #0da271;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .btn-primary:hover {
+            background: #0da271;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+    .btn-secondary {
+        background: var(--gray-light);
+        color: var(--text-dark);
+        border: 2px solid var(--gray-medium);
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+        .btn-secondary:hover {
+            background: var(--gray-medium);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+</style>
+</style>
