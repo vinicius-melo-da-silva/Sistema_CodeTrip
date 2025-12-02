@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CodeTrip.Models
+﻿namespace CodeTrip.Models
 {
     public class Pedido
     {
@@ -17,15 +15,14 @@ namespace CodeTrip.Models
         public int? Id_Pagamento { get; set; }
         public int? Id_Passeio { get; set; }
         public bool Ativo { get; set; } = true;
-
-public string Nome_Usuario { get; set; }
-        public string Nome_Cliente { get; set; }
-        public string Desc_Origem { get; set; }
-        public string Desc_Destino { get; set; }
-        public string Desc_Transp { get; set; }
-        public string Desc_End_Transporte { get; set; }
-        public string Desc_Hospedagem { get; set; }
-        public string Desc_Pagamento { get; set; }
-        public string Desc_Passeio { get; set; }
+        public string? Nome_Usuario { get; set; }
+        public string? Nome_Cli { get; set; }
+        public string? Origem_Cidade { get; set; }
+        public string? Destino_Desc { get; set; }
+        public string? Tipo_Transp { get; set; }
+        public string? Logradouro_End_Transporte { get; set; }
+        public string? Nome_Hospedagem { get; set; }
+        public string? Desc_Pagamento { get; set; }
+        public string? Nome_Passeio { get; set; }
     }
 }

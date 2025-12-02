@@ -1,71 +1,116 @@
 ﻿@model CodeTrip.Models.Pedido
+
 @{
     ViewData["Title"] = "Cadastrar Pedido";
 }
 
-<h2>Cadastrar Pedido</h2>
-
-<form asp-action="CadastrarPedido" method="post">
-    <div class="form-group">
-        <label>Usuário</label>
-        <select asp-for="Id_Usuario" class="form-control" asp-items="ViewBag.Usuarios"></select>
+<div class="formulario-container">
+    <div class="cabecalho-formulario">
+        <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip" class="logo-formulario">
+        <h1>Cadastrar Pedido</h1>
     </div>
 
-    <div class="form-group">
-        <label>Cliente</label>
-        <select asp-for="CPF_Cli" class="form-control" asp-items="ViewBag.Clientes"></select>
-    </div>
+    <div class="formulario-conteudo">
+        <form asp-action="CadastrarPedido" class="formulario-pedido">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-group">
-        <label>Origem</label>
-        <select asp-for="Id_Origem" class="form-control" asp-items="ViewBag.Origem"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_Usuario">Usuário:</label>
+                <select name="Id_Usuario" id="Id_Usuario" class="controle-formulario" asp-items="@ViewBag.Usuarios" required>
+                    <option value="">-- Selecione um usuário --</option>
+                </select>
+                <span asp-validation-for="Id_Usuario" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Destino</label>
-        <select asp-for="Id_Destino" class="form-control" asp-items="ViewBag.Destino"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label for="CPF_Cli">Cliente:</label>
+                <select name="CPF_Cli" id="CPF_Cli" class="controle-formulario" asp-items="@ViewBag.Clientes" required>
+                    <option value="">-- Selecione um cliente --</option>
+                </select>
+                <span asp-validation-for="CPF_Cli" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Data Início</label>
-        <input asp-for="Data_Inicio" type="date" class="form-control" />
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_Origem">Origem da Viagem:</label>
+                <select name="Id_Origem" id="Id_Origem" class="controle-formulario" asp-items="@ViewBag.Origens" required>
+                    <option value="">-- Selecione a origem --</option>
+                </select>
+                <span asp-validation-for="Id_Origem" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Data Fim</label>
-        <input asp-for="Data_Fim" type="date" class="form-control" />
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_Destino">Destino da Viagem:</label>
+                <select name="Id_Destino" id="Id_Destino" class="controle-formulario" asp-items="@ViewBag.Destinos" required>
+                    <option value="">-- Selecione o destino --</option>
+                </select>
+                <span asp-validation-for="Id_Destino" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Transporte</label>
-        <select asp-for="Id_Transp" class="form-control" asp-items="ViewBag.Transporte"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label asp-for="Data_Inicio" class="rotulo-controle"></label>
+                <input asp-for="Data_Inicio" type="date" class="controle-formulario" required />
+                <span asp-validation-for="Data_Inicio" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Endereço Transporte</label>
-        <select asp-for="Id_End_Transporte" class="form-control" asp-items="ViewBag.EndTransporte"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label asp-for="Data_Fim" class="rotulo-controle"></label>
+                <input asp-for="Data_Fim" type="date" class="controle-formulario" required />
+                <span asp-validation-for="Data_Fim" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Hospedagem</label>
-        <select asp-for="Id_Hospedagem" class="form-control" asp-items="ViewBag.Hospedagem"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_Transp">Transporte:</label>
+                <select name="Id_Transp" id="Id_Transp" class="controle-formulario" asp-items="@ViewBag.Transportes" required>
+                    <option value="">-- Selecione um Transporte --</option>
+                </select>
+                <span asp-validation-for="Id_Transp" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Pagamento</label>
-        <select asp-for="Id_Pagamento" class="form-control" asp-items="ViewBag.Pagamento"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_End_Transporte">Endereço de Transporte:</label>
+                <select name="Id_End_Transporte" id="Id_End_Transporte" class="controle-formulario" asp-items="@ViewBag.End_Transportes" required>
+                    <option value="">-- Selecione um Endereço de Transporte --</option>
+                </select>
+                <span asp-validation-for="Id_End_Transporte" class="text-danger"></span>
+            </div>
 
-    <div class="form-group">
-        <label>Passeio</label>
-        <select asp-for="Id_Passeio" class="form-control" asp-items="ViewBag.Passeio"></select>
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_Hospedagem">Hospedagem:</label>
+                <select name="Id_Hospedagem" id="Id_Hospedagem" class="controle-formulario" asp-items="@ViewBag.Hospedagens" required>
+                    <option value="">-- Selecione uma Hospedagem --</option>
+                </select>
+                <span asp-validation-for="Id_Hospedagem" class="text-danger"></span>
+            </div>
 
-    <div class="form-group form-check">
-        <input asp-for="Ativo" class="form-check-input" />
-        <label class="form-check-label">Pedido Ativo</label>
-    </div>
+            <div class="grupo-formulario">
+                <label for="Id_Pagamento">Pagamento:</label>
+                <select name="Id_Pagamento" id="Id_Pagamento" class="controle-formulario" asp-items="@ViewBag.Pagamentos" required>
+                    <option value="">-- Selecione um tipo de Pagamento --</option>
+                </select>
+                <span asp-validation-for="Id_Pagamento" class="text-danger"></span>
+            </div>
 
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
-</form>
+            <div class="grupo-formulario">
+                <label for="Id_Passeio">Passeio:</label>
+                <select name="Id_Passeio" id="Id_Passeio" class="controle-formulario" asp-items="@ViewBag.Passeios" required>
+                    <option value="">-- Selecione um Passeio --</option>
+                </select>
+                <span asp-validation-for="Id_Passeio" class="text-danger"></span>
+            </div>
+
+            <div class="grupo-formulario checkbox">
+                <input asp-for="Ativo" class="checkbox-input" type="checkbox" checked />
+                <label asp-for="Ativo" class="checkbox-rotulo">Ativo</label>
+                <span asp-validation-for="Ativo" class="text-danger"></span>
+            </div>
+
+            <div class="botoes-formulario">
+                <input type="submit" value="Cadastrar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-dark">Voltar para Pedidos</a>
+                <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<link href="~/css/crud.css" rel="stylesheet" />
