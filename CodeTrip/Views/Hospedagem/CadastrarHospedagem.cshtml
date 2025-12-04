@@ -6,7 +6,7 @@
 
 <div class="formulario">
     <div class="menu">
-        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip" class="logo" />
         <h1>Cadastrar Hospedagem</h1>
     </div>
     <div class="col-md-4">
@@ -14,60 +14,65 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Nome_Hospedagem" class="control-label"></label>
+                <label asp-for="Nome_Hospedagem" class="control-label">Nome da Hospedagem</label>
                 <input asp-for="Nome_Hospedagem" class="form-control" />
                 <span asp-validation-for="Nome_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_Tipo_Hospedagem" class="control-label"></label>
-                <input asp-for="Id_Tipo_Hospedagem" class="form-control" />
+                <label asp-for="Id_Tipo_Hospedagem" class="control-label">Tipo de Hospedagem</label>
+                <select asp-for="Id_Tipo_Hospedagem" class="form-control" asp-items="@ViewBag.TiposHospedagem">
+                    <option value="">-- Selecione um tipo --</option>
+                </select>
                 <span asp-validation-for="Id_Tipo_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Id_Pensao" class="control-label"></label>
-                <input asp-for="Id_Pensao" class="form-control" />
+                <label asp-for="Id_Pensao" class="control-label">Tipo de Pensão</label>
+                <select asp-for="Id_Pensao" class="form-control" asp-items="@ViewBag.TiposPensao">
+                    <option value="">-- Selecione uma pensão --</option>
+                </select>
                 <span asp-validation-for="Id_Pensao" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Logradouro_Endereco_Hospedagem" class="control-label"></label>
+                <label asp-for="Logradouro_Endereco_Hospedagem" class="control-label">Logradouro</label>
                 <input asp-for="Logradouro_Endereco_Hospedagem" class="form-control" />
                 <span asp-validation-for="Logradouro_Endereco_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Numero_Endereco_Hospedagem" class="control-label"></label>
+                <label asp-for="Numero_Endereco_Hospedagem" class="control-label">Número</label>
                 <input asp-for="Numero_Endereco_Hospedagem" class="form-control" />
                 <span asp-validation-for="Numero_Endereco_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Bairro_Endereco_Hospedagem" class="control-label"></label>
+                <label asp-for="Bairro_Endereco_Hospedagem" class="control-label">Bairro</label>
                 <input asp-for="Bairro_Endereco_Hospedagem" class="form-control" />
                 <span asp-validation-for="Bairro_Endereco_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Complemento_Endereco_Hospedagem" class="control-label"></label>
+                <label asp-for="Complemento_Endereco_Hospedagem" class="control-label">Complemento</label>
                 <input asp-for="Complemento_Endereco_Hospedagem" class="form-control" />
                 <span asp-validation-for="Complemento_Endereco_Hospedagem" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="Cidade_Nome">Cidade:</label>
-
-                <select name="Cidade_Nome" id="Cidade_Nome" class="form-select" asp-items="@ViewBag.Cidades">
+                <label asp-for="Cidade_Nome" class="control-label">Cidade</label>
+                <select asp-for="Cidade_Nome" class="form-control" asp-items="@ViewBag.Cidades">
                     <option value="">-- Selecione uma cidade --</option>
                 </select>
+                <span asp-validation-for="Cidade_Nome" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="UF_Estado">Estado:</label>
-                <select name="UF_Estado" id="UF_Estado" class="form-select" asp-items="@ViewBag.Estados">
-                    <option value="">-- Selecione um Estado --</option>
+                <label asp-for="UF_Estado" class="control-label">Estado</label>
+                <select asp-for="UF_Estado" class="form-control" asp-items="@ViewBag.Estados">
+                    <option value="">-- Selecione um estado --</option>
                 </select>
+                <span asp-validation-for="UF_Estado" class="text-danger"></span>
             </div>
 
             <div class="botoes">

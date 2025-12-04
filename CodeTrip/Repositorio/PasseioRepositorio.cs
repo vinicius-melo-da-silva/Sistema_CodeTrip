@@ -13,7 +13,6 @@ namespace CodeTrip.Repositorio
             _conexaoMySQL = configuration.GetConnectionString("ConexaoMySQL");
         }
 
-        // Cadastrar passeio
         public void Cadastrar(Passeio passeio)
         {
             using var conexao = new MySqlConnection(_conexaoMySQL);
@@ -34,7 +33,6 @@ namespace CodeTrip.Repositorio
             cmd.ExecuteNonQuery();
         }
 
-        // Atualizar passeio
         public bool Atualizar(Passeio passeio)
         {
             try
@@ -70,7 +68,6 @@ namespace CodeTrip.Repositorio
             }
         }
 
-        // Obter todos passeios
         public List<Passeio> TodosPasseios()
         {
             var lista = new List<Passeio>();
@@ -99,7 +96,6 @@ namespace CodeTrip.Repositorio
             return lista;
         }
 
-        // Obter passeio por Id
         public Passeio ObterPasseio(int id)
         {
             using var conexao = new MySqlConnection(_conexaoMySQL);
@@ -128,7 +124,6 @@ namespace CodeTrip.Repositorio
             return null;
         }
 
-        // Excluir passeio
         public void Excluir(int id)
         {
             using var conexao = new MySqlConnection(_conexaoMySQL);
@@ -141,7 +136,6 @@ namespace CodeTrip.Repositorio
             cmd.ExecuteNonQuery();
         }
 
-        // Listar apenas passeios ativos para dropdown
         public List<Passeio> PasseiosAtivos()
         {
             var lista = new List<Passeio>();

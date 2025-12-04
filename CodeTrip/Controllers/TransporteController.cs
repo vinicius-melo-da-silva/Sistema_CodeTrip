@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
-using MySqlX.XDevAPI;
-using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CodeTrip.Controllers
@@ -10,8 +8,6 @@ namespace CodeTrip.Controllers
     public class TransporteController : Controller
     {
         private readonly TransporteRepositorio _transporteRepositorio;
-
-
 
         public TransporteController(TransporteRepositorio transporteRepositorio)
         {
@@ -27,8 +23,6 @@ namespace CodeTrip.Controllers
         {
             var estados = _transporteRepositorio.Estados() ?? new List<Estado>();
             ViewBag.Estados = new SelectList(estados, "UF_Estado", "UF_Estado");
-            var cidades = _transporteRepositorio.Cidades() ?? new List<Cidade>();
-            ViewBag.Cidades = new SelectList(cidades, "Cidade_Nome", "Cidade_Nome");
 
             return View();
         }
@@ -36,9 +30,7 @@ namespace CodeTrip.Controllers
         [HttpPost]
         public IActionResult CadastrarTransporte(Transporte transporte)
         {
-
             _transporteRepositorio.Cadastrar(transporte);
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -46,8 +38,6 @@ namespace CodeTrip.Controllers
         {
             var estados = _transporteRepositorio.Estados() ?? new List<Estado>();
             ViewBag.Estados = new SelectList(estados, "UF_Estado", "UF_Estado");
-            var cidades = _transporteRepositorio.Cidades() ?? new List<Cidade>();
-            ViewBag.Cidades = new SelectList(cidades, "Cidade_Nome", "Cidade_Nome");
 
             var transporte = _transporteRepositorio.ObterTransporte(id);
 
@@ -67,6 +57,7 @@ namespace CodeTrip.Controllers
             {
                 return BadRequest();
             }
+
             if (ModelState.IsValid)
             {
                 try
@@ -82,6 +73,7 @@ namespace CodeTrip.Controllers
                     return View(transporte);
                 }
             }
+
             return View(transporte);
         }
 

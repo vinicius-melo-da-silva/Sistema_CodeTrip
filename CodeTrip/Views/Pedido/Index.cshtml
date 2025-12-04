@@ -1,70 +1,85 @@
 ﻿@model IEnumerable<CodeTrip.Models.Pedido>
 
-@{
-    ViewData["Title"] = "Pedidos";
-}
-
-<div class="lista-container">
-    <div class="cabecalho-lista">
-        <div class="logo-titulo-container">
-            <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip" class="logo-lista">
-            <h1>Pedidos</h1>
-        </div>
-
-        <div class="acoes-lista">
-            <a asp-action="CadastrarPedido" class="btn btn-primary">Cadastrar Novo Pedido</a>
-            <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
-        </div>
+<header>
+    <div class="menu">
+        <link href="~/css/crud_lista.css" rel="stylesheet" />
+        <script src="~/js/site.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip" class="logo" />
+        <h1>Pedidos</h1>
     </div>
+    <div class="menu">
+        <a asp-controller="Pedido" asp-action="CadastrarPedido" class="btn btn-outline-primary">Cadastrar Pedido</a>
+        <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+    </div>
+</header>
 
-    <div class="tabela-container">
-
-        <table class="tabela-lista">
-            <thead>
+<html>
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th>Cliente</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Transporte</th>
+                <th>Endereço Transporte</th>
+                <th>Hospedagem</th>
+                <th>Pagamento</th>
+                <th>Passeio</th>
+                <th>Ativo</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <th>ID</th>
-                    <th>Usuário</th>
-                    <th>Cliente</th>
-                    <th>Origem</th>
-                    <th>Destino</th>
-                    <th>Data Início</th>
-                    <th>Data Fim</th>
-                    <th>Transporte</th>
-                    <th>Endereço Transporte</th>
-                    <th>Hospedagem</th>
-                    <th>Pagamento</th>
-                    <th>Passeio</th>
-                    <th>Ativo</th>
-                    <th>Ações</th>
+                    <td>@item.Id_Pedido</td>
+                    <td>@(string.IsNullOrEmpty(item.Nome_Usuario) ? item.Id_Usuario.ToString() : item.Nome_Usuario)</td>
+                    <td>@(string.IsNullOrEmpty(item.Nome_Cli) ? item.CPF_Cli : $"{item.Nome_Cli} ({item.CPF_Cli})")</td>
+                    <td>@(string.IsNullOrEmpty(item.Origem_Cidade) ? item.Id_Origem.ToString() : item.Origem_Cidade)</td>
+                    <td>@(string.IsNullOrEmpty(item.Destino_Desc) ? item.Id_Destino.ToString() : item.Destino_Desc)</td>
+                    <td>@item.Data_Inicio?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Data_Fim?.ToString("dd/MM/yyyy")</td>
+                    <td>@(string.IsNullOrEmpty(item.Tipo_Transp) ? item.Id_Transp.ToString() : item.Tipo_Transp)</td>
+                    <td>@(string.IsNullOrEmpty(item.Logradouro_End_Transporte) ? item.Id_End_Transporte.ToString() : item.Logradouro_End_Transporte)</td>
+                    <td>@(string.IsNullOrEmpty(item.Nome_Hospedagem) ? item.Id_Hospedagem.ToString() : item.Nome_Hospedagem)</td>
+                    <td>@(string.IsNullOrEmpty(item.Desc_Pagamento) ? item.Id_Pagamento.ToString() : item.Desc_Pagamento)</td>
+                    <td>@(string.IsNullOrEmpty(item.Nome_Passeio) ? item.Id_Passeio.ToString() : item.Nome_Passeio)</td>
+                    <td>@(item.Ativo ? "Sim" : "Não")</td>
+                    <td class="actions">
+                        @Html.ActionLink("Editar", "EditarPedido", new { id = item.Id_Pedido }, new { @class = "btn btn-sm btn-info" })
+                        |
+                        <button href="#" class="btn btn-sm btn-danger" onclick="confirmarExclusaoPedido(@item.Id_Pedido)">Excluir</button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var pedido in Model)
-                {
-                    <tr>
-                        <td>@pedido.Id_Pedido</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Nome_Usuario) ? pedido.Id_Usuario.ToString() : pedido.Nome_Usuario)</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Nome_Cli) ? pedido.CPF_Cli : $"{pedido.Nome_Cli} ({pedido.CPF_Cli})")</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Origem_Cidade) ? pedido.Id_Origem.ToString() : pedido.Origem_Cidade)</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Destino_Desc) ? pedido.Id_Destino.ToString() : pedido.Destino_Desc)</td>
-                        <td>@pedido.Data_Inicio?.ToString("dd/MM/yyyy")</td>
-                        <td>@pedido.Data_Fim?.ToString("dd/MM/yyyy")</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Tipo_Transp) ? pedido.Id_Transp.ToString() : pedido.Tipo_Transp)</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Logradouro_End_Transporte) ? pedido.Id_End_Transporte.ToString() : pedido.Logradouro_End_Transporte)</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Nome_Hospedagem) ? pedido.Id_Hospedagem.ToString() : pedido.Nome_Hospedagem)</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Desc_Pagamento) ? pedido.Id_Pagamento.ToString() : pedido.Desc_Pagamento)</td>
-                        <td>@(string.IsNullOrEmpty(pedido.Nome_Passeio) ? pedido.Id_Passeio.ToString() : pedido.Nome_Passeio)</td>
-                        <td>@(pedido.Ativo ? "Sim" : "Não")</td>
-                        <td class="acoes-celula">
-                            <a asp-action="EditarPedido" asp-route-id="@pedido.Id_Pedido" class="btn btn-sm btn-warning">Editar</a>
-                            <a asp-action="ExcluirPedido" asp-route-id="@pedido.Id_Pedido" class="btn btn-sm btn-danger"
-                               onclick="return confirm('Tem certeza que deseja excluir este pedido?');">Excluir</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
 
-<link href="~/css/crud_lista.css" rel="stylesheet" />
+<script>
+    function confirmarExclusaoPedido(id) {
+        Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você não poderá reverter isso!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '@Url.Action("ExcluirPedido", "Pedido")?id=' + id;
+            }
+        })
+    }
+</script>

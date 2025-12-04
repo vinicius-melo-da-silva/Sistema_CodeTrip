@@ -16,8 +16,8 @@ namespace CodeTrip.Controllers
 
         public IActionResult Index()
         {
-            var indicadores = _indicadoresRepositorio.ObterTodosIndicadores();
-            return View(indicadores);
+            var dashboard = _indicadoresRepositorio.ObterTodosIndicadores();
+            return View(dashboard);
         }
 
         [HttpGet]
@@ -49,40 +49,51 @@ namespace CodeTrip.Controllers
         }
 
         [HttpGet]
+        public JsonResult ObterVendasPorOperador()
+        {
+            var vendas = _indicadoresRepositorio.ObterVendasPorOperador(5);
+            return Json(vendas);
+        }
+
+        [HttpGet]
         public JsonResult ObterResumo()
         {
             var resumo = new
             {
                 ReceitaTotal = _indicadoresRepositorio.ObterReceitaTotal(),
                 ClientesAtivos = _indicadoresRepositorio.ObterClientesAtivos(),
-                ClientesInativos = _indicadoresRepositorio.ObterClientesInativos()
+                ClientesInativos = _indicadoresRepositorio.ObterClientesInativos(),
+                TotalViagensMesAtual = _indicadoresRepositorio.ObterTotalViagensMesAtual(),
+                TotalViagensHoje = _indicadoresRepositorio.ObterTotalViagensHoje()
             };
             return Json(resumo);
         }
 
-        // ================= EXPORTAÇÃO PDF (NOVO) =================
+        // ================= EXPORTAÇÃO PDF =================
         public IActionResult ExportarPDF()
         {
             var dados = _indicadoresRepositorio.ObterDadosParaExportacao();
 
-            // Criar conteúdo HTML simples para o PDF
             var htmlContent = new StringBuilder();
             htmlContent.Append(@"
                 <html>
                 <head>
                     <style>
-                        body { font-family: Arial, sans-serif; }
-                        .header { text-align: center; color: #2c3e50; }
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .header { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 20px; margin-bottom: 30px; }
                         .section { margin: 20px 0; }
-                        .table { width: 100%; border-collapse: collapse; }
-                        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        .table th { background-color: #f2f2f2; }
-                        .card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+                        .table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+                        .table th, .table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                        .table th { background-color: #f2f2f2; color: #333; }
+                        .card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; background-color: #f9f9f9; }
+                        .total { font-weight: bold; color: #2c3e50; }
+                        .grafico-section { page-break-inside: avoid; }
                     </style>
                 </head>
                 <body>
                     <div class='header'>
                         <h1>Relatório CodeTrip</h1>
+                        <h3>Dashboard de Indicadores</h3>
                         <p>Gerado em: " + dados.DataGeracao.ToString("dd/MM/yyyy HH:mm") + @"</p>
                     </div>");
 
@@ -93,14 +104,28 @@ namespace CodeTrip.Controllers
                     <div class='card'>
                         <strong>Receita Total:</strong> R$ " + dados.ReceitaTotal.ToString("N2") + @"<br>
                         <strong>Clientes Ativos:</strong> " + dados.TotalClientesAtivos + @"<br>
-                        <strong>Clientes Inativos:</strong> " + dados.TotalClientesInativos + @"
+                        <strong>Clientes Inativos:</strong> " + dados.TotalClientesInativos + @"<br>
+                        <strong>Total de Viagens (Mês Atual):</strong> " + dados.ViagensMensais.Where(v => v.Mes == DateTime.Now.ToString("yyyy-MM")).Select(v => v.Quantidade).FirstOrDefault() + @"
                     </div>
                 </div>");
+
+            // Vendas por Operador
+            htmlContent.Append(@"
+                <div class='section'>
+                    <h2>Vendas por Operador (Top 10)</h2>
+                    <table class='table'>
+                        <tr><th>Operador</th><th>Tipo</th><th>Quantidade de Vendas</th><th>Valor Total</th></tr>");
+            foreach (var item in dados.VendasOperadores)
+            {
+                htmlContent.Append($"<tr><td>{item.Operador}</td><td>{item.Role}</td><td>{item.QuantidadeVendas}</td><td>R$ {item.ValorTotal:N2}</td></tr>");
+            }
+            htmlContent.Append("</table></div>");
 
             // Viagens por Mês
             htmlContent.Append(@"
                 <div class='section'>
-                    <h2>Viagens por Mês</h2>
+                    <h2>Viagens por Mês (Últimos 12 meses)</h2>
+                    <p class='total'>Total Geral: " + dados.ViagensMensais.Sum(v => v.Quantidade) + @" viagens</p>
                     <table class='table'>
                         <tr><th>Mês</th><th>Quantidade</th></tr>");
             foreach (var item in dados.ViagensMensais)
@@ -109,10 +134,23 @@ namespace CodeTrip.Controllers
             }
             htmlContent.Append("</table></div>");
 
+            // Viagens por Dia
+            htmlContent.Append(@"
+                <div class='section'>
+                    <h2>Viagens por Dia (Últimos 30 dias)</h2>
+                    <p class='total'>Total no Período: " + dados.ViagensDiarias.Sum(v => v.Quantidade) + @" viagens</p>
+                    <table class='table'>
+                        <tr><th>Data</th><th>Quantidade</th></tr>");
+            foreach (var item in dados.ViagensDiarias)
+            {
+                htmlContent.Append($"<tr><td>{item.Data}</td><td>{item.Quantidade}</td></tr>");
+            }
+            htmlContent.Append("</table></div>");
+
             // Top Destinos
             htmlContent.Append(@"
                 <div class='section'>
-                    <h2>Top Destinos</h2>
+                    <h2>Top 10 Destinos</h2>
                     <table class='table'>
                         <tr><th>Destino</th><th>Vendas</th></tr>");
             foreach (var item in dados.TopDestinos)
@@ -121,19 +159,29 @@ namespace CodeTrip.Controllers
             }
             htmlContent.Append("</table></div>");
 
+            // Top Passeios
+            htmlContent.Append(@"
+                <div class='section'>
+                    <h2>Top 10 Passeios</h2>
+                    <table class='table'>
+                        <tr><th>Passeio</th><th>Vendas</th></tr>");
+            foreach (var item in dados.TopPasseios)
+            {
+                htmlContent.Append($"<tr><td>{item.Passeio}</td><td>{item.Quantidade}</td></tr>");
+            }
+            htmlContent.Append("</table></div>");
+
             htmlContent.Append("</body></html>");
 
-            // Retornar como arquivo (em produção, usar biblioteca como iTextSharp para PDF real)
             var bytes = Encoding.UTF8.GetBytes(htmlContent.ToString());
             return File(bytes, "text/html", $"relatorio-codetrip-{DateTime.Now:yyyyMMdd}.html");
         }
 
-        // ================= EXPORTAÇÃO EXCEL (NOVO) =================
+        // ================= EXPORTAÇÃO EXCEL =================
         public IActionResult ExportarExcel()
         {
             var dados = _indicadoresRepositorio.ObterDadosParaExportacao();
 
-            // Criar conteúdo CSV (simulando Excel)
             var csvContent = new StringBuilder();
 
             // Cabeçalho
@@ -147,12 +195,32 @@ namespace CodeTrip.Controllers
             csvContent.AppendLine($"Clientes Inativos;{dados.TotalClientesInativos}");
             csvContent.AppendLine();
 
+            // Vendas por Operador
+            csvContent.AppendLine("VENDAS POR OPERADOR");
+            csvContent.AppendLine("Operador;Tipo;Quantidade de Vendas;Valor Total");
+            foreach (var item in dados.VendasOperadores)
+            {
+                csvContent.AppendLine($"{item.Operador};{item.Role};{item.QuantidadeVendas};R$ {item.ValorTotal:N2}");
+            }
+            csvContent.AppendLine();
+
             // Viagens por Mês
             csvContent.AppendLine("VIAGENS POR MÊS");
+            csvContent.AppendLine($"Total Geral;{dados.ViagensMensais.Sum(v => v.Quantidade)}");
             csvContent.AppendLine("Mês;Quantidade");
             foreach (var item in dados.ViagensMensais)
             {
                 csvContent.AppendLine($"{item.Mes};{item.Quantidade}");
+            }
+            csvContent.AppendLine();
+
+            // Viagens por Dia
+            csvContent.AppendLine("VIAGENS POR DIA (Últimos 30 dias)");
+            csvContent.AppendLine($"Total no Período;{dados.ViagensDiarias.Sum(v => v.Quantidade)}");
+            csvContent.AppendLine("Data;Quantidade");
+            foreach (var item in dados.ViagensDiarias)
+            {
+                csvContent.AppendLine($"{item.Data};{item.Quantidade}");
             }
             csvContent.AppendLine();
 

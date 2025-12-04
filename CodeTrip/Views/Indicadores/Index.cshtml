@@ -1,9 +1,4 @@
-﻿<header>
-    <link href="~/css/Indicadores.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</header>
-
-@model CodeTrip.Models.Indicadores
+﻿@model CodeTrip.Models.DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard - Indicadores";
 }
@@ -11,10 +6,16 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Dashboard - Indicadores</h1>
+
         <div>
+            <a href="@Url.Action("MenuSistema", "Home")" class="btn btn-secondary me-2">
+                <i class="fas fa-arrow-left"></i> Menu Principal
+            </a>
+
             <a href="@Url.Action("ExportarPDF")" class="btn btn-danger me-2">
                 <i class="fas fa-file-pdf"></i> Exportar PDF
             </a>
+
             <a href="@Url.Action("ExportarExcel")" class="btn btn-success">
                 <i class="fas fa-file-excel"></i> Exportar Excel
             </a>
@@ -27,31 +28,36 @@
             <div class="card text-white bg-primary">
                 <div class="card-body">
                     <h5 class="card-title">Receita Total</h5>
-                    <h2 class="card-text">R$ @Model.ReceitaTotal.ToString("N2")</h2>
+                    <h2 class="card-text">R$ @Model.Indicadores.ReceitaTotal.ToString("N2")</h2>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3">
             <div class="card text-white bg-success">
                 <div class="card-body">
                     <h5 class="card-title">Clientes Ativos</h5>
-                    <h2 class="card-text">@Model.ClientesAtivos</h2>
+                    <h2 class="card-text">@Model.Indicadores.ClientesAtivos</h2>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3">
             <div class="card text-white bg-warning">
                 <div class="card-body">
-                    <h5 class="card-title">Clientes Inativos</h5>
-                    <h2 class="card-text">@Model.ClientesInativos</h2>
+                    <h5 class="card-title">Viagens este Mês</h5>
+                    <h2 class="card-text">@Model.TotalViagensMesAtual</h2>
+                    <p class="mb-0">Total de viagens no mês atual</p>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3">
             <div class="card text-white bg-info">
                 <div class="card-body">
-                    <h5 class="card-title">Total Clientes</h5>
-                    <h2 class="card-text">@(Model.ClientesAtivos + Model.ClientesInativos)</h2>
+                    <h5 class="card-title">Viagens Hoje</h5>
+                    <h2 class="card-text">@Model.TotalViagensHoje</h2>
+                    <p class="mb-0">Total de viagens na data atual</p>
                 </div>
             </div>
         </div>
@@ -63,6 +69,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5>Viagens por Mês</h5>
+                    <p class="mb-0">Total nos últimos 12 meses: <strong>@Model.Indicadores.ViagensPorMes.Sum(v => v.Quantidade)</strong></p>
                 </div>
                 <div class="card-body">
                     <canvas id="graficoViagensMes" width="400" height="200"></canvas>
@@ -75,6 +82,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5>Viagens por Dia (Últimos 30 dias)</h5>
+                    <p class="mb-0">Total no período: <strong>@Model.Indicadores.ViagensPorDia.Sum(v => v.Quantidade)</strong></p>
                 </div>
                 <div class="card-body">
                     <canvas id="graficoViagensDia" width="400" height="200"></canvas>
@@ -83,8 +91,60 @@
         </div>
     </div>
 
+    <!-- Tabela de Vendas por Operador -->
     <div class="row mt-4">
-        <!-- Rankings -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top 5 Vendas por Operador</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Operador</th>
+                                    <th>Tipo</th>
+                                    <th>Vendas</th>
+                                    <th>Valor Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var venda in Model.VendasPorOperador)
+                                {
+                                    <tr>
+                                        <td>@venda.Operador</td>
+                                        <td>
+                                            <span class="badge @(venda.Role == "E-commerce" ? "bg-success" : venda.Role == "Admin" ? "bg-danger" : "bg-primary")">
+                                                @venda.Role
+                                            </span>
+                                        </td>
+                                        <td>@venda.QuantidadeVendas</td>
+                                        <td>R$ @venda.ValorTotal.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico de Pizza de Vendas por Operador -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Distribuição de Vendas por Operador</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="graficoPizzaOperadores" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Top 5 Destinos -->
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header">
@@ -92,7 +152,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        @foreach (var destino in Model.DestinosMaisVendidos)
+                        @foreach (var destino in Model.Indicadores.DestinosMaisVendidos)
                         {
                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                 @destino.Destino
@@ -104,6 +164,7 @@
             </div>
         </div>
 
+        <!-- Top 5 Passeios -->
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -111,7 +172,7 @@
                 </div>
                 <div class="card-body">
                     <div class="list-group">
-                        @foreach (var passeio in Model.PasseiosMaisVendidos)
+                        @foreach (var passeio in Model.Indicadores.PasseiosMaisVendidos)
                         {
                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                 @passeio.Passeio
@@ -127,20 +188,22 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         // Dados do gráfico mensal
-        var viagensPorMes = @Html.Raw(Json.Serialize(Model.ViagensPorMes));
-        var viagensPorDia = @Html.Raw(Json.Serialize(Model.ViagensPorDia));
+        var viagensPorMes = @Html.Raw(Json.Serialize(Model.Indicadores.ViagensPorMes));
+        var viagensPorDia = @Html.Raw(Json.Serialize(Model.Indicadores.ViagensPorDia));
+        var vendasPorOperador = @Html.Raw(Json.Serialize(Model.VendasPorOperador));
 
         // Gráfico de Viagens por Mês
         var ctxMes = document.getElementById('graficoViagensMes').getContext('2d');
         var chartMes = new Chart(ctxMes, {
             type: 'bar',
             data: {
-                labels: viagensPorMes.map(function(item) { return item.mes; }),
+                labels: viagensPorMes.map(function (item) { return item.mes; }),
                 datasets: [{
                     label: 'Viagens',
-                    data: viagensPorMes.map(function(item) { return item.quantidade; }),
+                    data: viagensPorMes.map(function (item) { return item.quantidade; }),
                     backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -148,11 +211,19 @@
             },
             options: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 1,
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : '';
+                            }
                         }
                     }
                 }
@@ -164,10 +235,10 @@
         var chartDia = new Chart(ctxDia, {
             type: 'line',
             data: {
-                labels: viagensPorDia.map(function(item) { return item.data; }).reverse(),
+                labels: viagensPorDia.map(function (item) { return item.data; }).reverse(),
                 datasets: [{
                     label: 'Viagens por Dia',
-                    data: viagensPorDia.map(function(item) { return item.quantidade; }).reverse(),
+                    data: viagensPorDia.map(function (item) { return item.quantidade; }).reverse(),
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2,
@@ -177,15 +248,83 @@
             },
             options: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 1,
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : '';
+                            }
                         }
                     }
                 }
             }
         });
+
+        // Gráfico de Pizza de Vendas por Operador
+        var ctxPizza = document.getElementById('graficoPizzaOperadores').getContext('2d');
+        var chartPizza = new Chart(ctxPizza, {
+            type: 'pie',
+            data: {
+                labels: vendasPorOperador.map(function (item) { return item.operador; }),
+                datasets: [{
+                    data: vendasPorOperador.map(function (item) { return item.valorTotal; }),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                var value = context.raw || 0;
+                                var total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                var percentage = Math.round((value / total) * 100);
+                                return label + ': R$ ' + value.toFixed(2) + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Atualiza os totais em tempo real (opcional)
+        setInterval(function() {
+            fetch('@Url.Action("ObterResumo", "Indicadores")')
+                .then(response => response.json())
+                .then(data => {
+                    // Atualiza os cards de resumo se necessário
+                    document.querySelector('.bg-warning .card-text').textContent = data.totalViagensMesAtual;
+                    document.querySelector('.bg-info .card-text').textContent = data.totalViagensHoje;
+                });
+        }, 60000); // Atualiza a cada minuto
     </script>
 }

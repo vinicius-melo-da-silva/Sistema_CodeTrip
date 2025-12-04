@@ -6,7 +6,7 @@
         <script src="~/js/site.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip" class="logo" />
         <h1>Hospedagem</h1>
     </div>
     <div class="menu">
@@ -15,73 +15,36 @@
     </div>
 </header>
 
-
 <html>
 <body>
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nome_Hospedagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id_Tipo_Hospedagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id_Pensao)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Logradouro_Endereco_Hospedagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Numero_Endereco_Hospedagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Bairro_Endereco_Hospedagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Complemento_Endereco_Hospedagem)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Cidade_Nome)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UF_Estado)
-                </th>
-                <th>Acão</th>
+                <th>@Html.DisplayNameFor(model => model.Nome_Hospedagem)</th>
+                <th>Tipo Hospedagem</th>
+                <th>Tipo Pensão</th>
+                <th>@Html.DisplayNameFor(model => model.Logradouro_Endereco_Hospedagem)</th>
+                <th>@Html.DisplayNameFor(model => model.Numero_Endereco_Hospedagem)</th>
+                <th>@Html.DisplayNameFor(model => model.Bairro_Endereco_Hospedagem)</th>
+                <th>@Html.DisplayNameFor(model => model.Complemento_Endereco_Hospedagem)</th>
+                <th>@Html.DisplayNameFor(model => model.Cidade_Nome)</th>
+                <th>@Html.DisplayNameFor(model => model.UF_Estado)</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nome_Hospedagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id_Tipo_Hospedagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Id_Pensao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Logradouro_Endereco_Hospedagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Numero_Endereco_Hospedagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Bairro_Endereco_Hospedagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Complemento_Endereco_Hospedagem)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cidade_Nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UF_Estado)
-                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Nome_Hospedagem)</td>
+                    <td>@item.Id_Tipo_Hospedagem - @item.Desc_Hospedagem</td>
+                    <td>@item.Id_Pensao - @item.Desc_Pensao</td>
+                    <td>@Html.DisplayFor(modelItem => item.Logradouro_Endereco_Hospedagem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Numero_Endereco_Hospedagem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Bairro_Endereco_Hospedagem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Complemento_Endereco_Hospedagem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Cidade_Nome)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UF_Estado)</td>
                     <td class="actions">
                         @Html.ActionLink("Editar", "EditarHospedagem", new { id = item.Id_Hospedagem }, new { @class = "btn btn-sm btn-info" })
                         |

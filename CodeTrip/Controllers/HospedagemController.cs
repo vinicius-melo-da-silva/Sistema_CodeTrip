@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
-using MySqlX.XDevAPI;
-using MySql.Data.MySqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CodeTrip.Controllers
@@ -10,8 +8,6 @@ namespace CodeTrip.Controllers
     public class HospedagemController : Controller
     {
         private readonly HospedagemRepositorio _hospedagemRepositorio;
-
-
 
         public HospedagemController(HospedagemRepositorio hospedagemRepositorio)
         {
@@ -25,30 +21,25 @@ namespace CodeTrip.Controllers
 
         public IActionResult CadastrarHospedagem()
         {
-            var estados = _hospedagemRepositorio.Estados() ?? new List<Estado>();
-            ViewBag.Estados = new SelectList(estados, "UF_Estado", "UF_Estado");
-            var cidades = _hospedagemRepositorio.Cidades() ?? new List<Cidade>();
-            ViewBag.Cidades = new SelectList(cidades, "Cidade_Nome", "Cidade_Nome");
-
+            CarregarViewBags();
             return View();
         }
 
         [HttpPost]
         public IActionResult CadastrarHospedagem(Hospedagem hospedagem)
         {
+            if (ModelState.IsValid)
+            {
+                _hospedagemRepositorio.Cadastrar(hospedagem);
+                return RedirectToAction(nameof(Index));
+            }
 
-            _hospedagemRepositorio.Cadastrar(hospedagem);
-
-            return RedirectToAction(nameof(Index));
+            CarregarViewBags();
+            return View(hospedagem);
         }
 
         public IActionResult EditarHospedagem(int id)
         {
-            var estados = _hospedagemRepositorio.Estados() ?? new List<Estado>();
-            ViewBag.Estados = new SelectList(estados, "UF_Estado", "UF_Estado");
-            var cidades = _hospedagemRepositorio.Cidades() ?? new List<Cidade>();
-            ViewBag.Cidades = new SelectList(cidades, "Cidade_Nome", "Cidade_Nome");
-
             var hospedagem = _hospedagemRepositorio.ObterHospedagem(id);
 
             if (hospedagem == null)
@@ -56,17 +47,19 @@ namespace CodeTrip.Controllers
                 return NotFound();
             }
 
+            CarregarViewBags();
             return View(hospedagem);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditarHospedagem(int id, [Bind("Id_Hospedagem, Nome_Hospedagem, Id_Tipo_Hospedagem, Id_Pensao, Logradouro_Endereco_Hospedagem, Numero_Endereco_Hospedagem, Bairro_Endereco_Hospedagem, Complemento_Endereco_Hospedagem, Cidade_Nome, UF_Estado")] Hospedagem hospedagem)
+        public IActionResult EditarHospedagem(int id, Hospedagem hospedagem)
         {
             if (id != hospedagem.Id_Hospedagem)
             {
                 return BadRequest();
             }
+
             if (ModelState.IsValid)
             {
                 try
@@ -79,9 +72,12 @@ namespace CodeTrip.Controllers
                 catch (Exception)
                 {
                     ModelState.AddModelError("", "Ocorreu um erro ao Editar.");
+                    CarregarViewBags();
                     return View(hospedagem);
                 }
             }
+
+            CarregarViewBags();
             return View(hospedagem);
         }
 
@@ -89,6 +85,21 @@ namespace CodeTrip.Controllers
         {
             _hospedagemRepositorio.Excluir(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        private void CarregarViewBags()
+        {
+            var estados = _hospedagemRepositorio.Estados() ?? new List<Estado>();
+            ViewBag.Estados = new SelectList(estados, "UF_Estado", "Nome_Estado");
+
+            var cidades = _hospedagemRepositorio.Cidades() ?? new List<Cidade>();
+            ViewBag.Cidades = new SelectList(cidades, "Cidade_Nome", "Cidade_Nome");
+
+            var tiposHospedagem = _hospedagemRepositorio.TiposHospedagem() ?? new List<Tipo_Hospedagem>();
+            ViewBag.TiposHospedagem = new SelectList(tiposHospedagem, "Id_Tipo_Hospedagem", "Desc_Hospedagem");
+
+            var tiposPensao = _hospedagemRepositorio.TiposPensao() ?? new List<Tipo_Pensao>();
+            ViewBag.TiposPensao = new SelectList(tiposPensao, "Id_Pensao", "Desc_Pensao");
         }
     }
 }

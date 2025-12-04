@@ -1,28 +1,29 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
 using CodeTrip.Models;
-using static Mysqlx.Expect.Open.Types.Condition.Types;
-using MySqlX.XDevAPI;
-using Mysqlx.Crud;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Collections.Generic;
 
 namespace CodeTrip.Repositorio
 {
-    public class TransporteRepositorio(IConfiguration configuration)
+    public class TransporteRepositorio
     {
-        private readonly string _conexaoMySQL = configuration.GetConnectionString("ConexaoMySQL");
+        private readonly string _conexaoMySQL;
+
+        public TransporteRepositorio(IConfiguration configuration)
+        {
+            _conexaoMySQL = configuration.GetConnectionString("ConexaoMySQL");
+        }
+
         public void Cadastrar(Transporte transporte)
         {
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("insert into Transporte (Tipo_Transp, UF_Estado) values(@tipo_transp, @uf_estado)", conexao);
+                MySqlCommand cmd = new MySqlCommand(
+                    "INSERT INTO Transporte (Tipo_Transp, UF_Estado) VALUES(@tipo_transp, @uf_estado)", conexao);
 
                 cmd.Parameters.Add("@tipo_transp", MySqlDbType.VarChar).Value = transporte.Tipo_Transp;
                 cmd.Parameters.Add("@uf_estado", MySqlDbType.VarChar).Value = transporte.UF_Estado;
                 cmd.ExecuteNonQuery();
-                conexao.Close();
             }
         }
 
@@ -33,67 +34,75 @@ namespace CodeTrip.Repositorio
                 using (var conexao = new MySqlConnection(_conexaoMySQL))
                 {
                     conexao.Open();
-                    MySqlCommand cmd = new MySqlCommand("Update Transporte set Tipo_Transp=@tipo_transp, UF_Estado=@uf_estado" + " where Id_Transp=@id ", conexao);
-                    cmd.Parameters.Add("@id", MySqlDbType.VarChar).Value = transporte.Id_Transp;
+                    MySqlCommand cmd = new MySqlCommand(
+                        "UPDATE Transporte SET Tipo_Transp=@tipo_transp, UF_Estado=@uf_estado WHERE Id_Transp=@id",
+                        conexao);
+
+                    cmd.Parameters.Add("@id", MySqlDbType.Int32).Value = transporte.Id_Transp;
                     cmd.Parameters.Add("@tipo_transp", MySqlDbType.VarChar).Value = transporte.Tipo_Transp;
                     cmd.Parameters.Add("@uf_estado", MySqlDbType.VarChar).Value = transporte.UF_Estado;
-                    int linhasAfetadas = cmd.ExecuteNonQuery();
-                    return linhasAfetadas > 0;
 
+                    return cmd.ExecuteNonQuery() > 0;
                 }
             }
-            catch (MySqlException ex)
+            catch
             {
-                Console.WriteLine($"Erro ao atualizar cliente: {ex.Message}");
                 return false;
             }
         }
 
         public IEnumerable<Transporte> TodosTransportes()
         {
-            List<Transporte> TransporteLista = new List<Transporte>();
+            var lista = new List<Transporte>();
+
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * from Transporte", conexao);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM Transporte", conexao);
                 DataTable dt = new DataTable();
-                da.Fill(dt);
-                conexao.Close();
+                new MySqlDataAdapter(cmd).Fill(dt);
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    TransporteLista.Add(
-                                new Transporte
-                                {
-                                    Id_Transp = Convert.ToInt32(dr["Id_Transp"]),
-                                    Tipo_Transp = (string)dr["Tipo_Transp"],
-                                    UF_Estado = (string)dr["UF_Estado"]
-                                });
+                    lista.Add(new Transporte
+                    {
+                        Id_Transp = Convert.ToInt32(dr["Id_Transp"]),
+                        Tipo_Transp = dr["Tipo_Transp"].ToString(),
+                        UF_Estado = dr["UF_Estado"].ToString()
+                    });
                 }
-                return TransporteLista;
             }
+
+            return lista;
         }
 
         public Transporte ObterTransporte(int id)
         {
+            Transporte transporte = null;
+
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM Transporte WHERE Id_Transp=@id", conexao);
+                MySqlCommand cmd = new MySqlCommand(
+                    "SELECT * FROM Transporte WHERE Id_Transp=@id", conexao);
+
                 cmd.Parameters.AddWithValue("@id", id);
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                MySqlDataReader dr;
-                Transporte transporte = new Transporte();
-                dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                while (dr.Read())
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
                 {
-                    transporte.Id_Transp = Convert.ToInt32(dr["Id_Transp"]);
-                    transporte.Tipo_Transp = ((string)dr["Tipo_Transp"]);
-                    transporte.UF_Estado = ((string)dr["UF_Estado"]);
+                    if (dr.Read())
+                    {
+                        transporte = new Transporte
+                        {
+                            Id_Transp = Convert.ToInt32(dr["Id_Transp"]),
+                            Tipo_Transp = dr["Tipo_Transp"].ToString(),
+                            UF_Estado = dr["UF_Estado"].ToString()
+                        };
+                    }
                 }
-                return transporte;
             }
+
+            return transporte;
         }
 
         public void Excluir(int id)
@@ -101,60 +110,37 @@ namespace CodeTrip.Repositorio
             using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM Transporte WHERE Id_Transp=@id", conexao);
+                MySqlCommand cmd = new MySqlCommand(
+                    "DELETE FROM Transporte WHERE Id_Transp=@id", conexao);
+
                 cmd.Parameters.AddWithValue("@id", id);
-                int i = cmd.ExecuteNonQuery();
-                conexao.Close();
+                cmd.ExecuteNonQuery();
             }
         }
 
         public List<Estado> Estados()
         {
             var lista = new List<Estado>();
-            using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
-            {
-                conexao.Open();
-                string query = "SELECT UF_Estado, Nome_Estado from Estado";
-                using (MySqlCommand comando = new MySqlCommand(query, conexao))
-                {
-                    using (MySqlDataReader reader = comando.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            lista.Add(new Estado
-                            {
-                                UF_Estado = reader.GetString("UF_Estado"),
-                                Nome_Estado = reader.GetString("Nome_Estado")
-                            });
-                        }
-                    }
-                }
-            }
-            return lista;
-        }
 
-        public List<Cidade> Cidades()
-        {
-            var lista = new List<Cidade>();
-            using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT UF_Estado, Cidade_Nome from Cidade";
+                string query = "SELECT UF_Estado, Nome_Estado FROM Estado";
+
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
+                using (MySqlDataReader reader = comando.ExecuteReader())
                 {
-                    using (MySqlDataReader reader = comando.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        lista.Add(new Estado
                         {
-                            lista.Add(new Cidade
-                            {
-                                UF_Estado = reader.GetString("UF_Estado"),
-                                Cidade_Nome = reader.GetString("Cidade_Nome")
-                            });
-                        }
+                            UF_Estado = reader.GetString("UF_Estado"),
+                            Nome_Estado = reader.GetString("Nome_Estado")
+                        });
                     }
                 }
             }
+
             return lista;
         }
     }

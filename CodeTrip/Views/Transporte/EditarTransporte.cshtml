@@ -1,39 +1,29 @@
-﻿@model CodeTrip.Models.Transporte;
+﻿@model CodeTrip.Models.Transporte
 
 <header>
     <link href="~/css/crud.css" rel="stylesheet" />
 </header>
 
-
 <div class="formulario">
     <div class="menu">
-        <img src="~/src/imagens/logo_nome.jpg" alt="Logo Codetrip" class="logo" />
+        <img src="~/src/imagens/logo_nome.png" class="logo" />
         <h1>Editar Transporte</h1>
     </div>
 
     <div class="col-md-4">
         <form asp-action="EditarTransporte" method="post">
-            @*Esse token desempenha um papel crucial na prevenção de ataques de Cross-Site Request Forgery (CSRF).
-            Um ataque CSRF ocorre quando um site malicioso, um e-mail, um programa de mensagens 
-            instantâneas ou um programa induz um navegador da web de um usuário conectado a um aplicativo da web a executar uma 
-            ação indesejada naquele aplicativo. Isso pode acontecer sem o conhecimento ou consentimento do usuário.*@
             @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id_Transp" />
 
             <div class="form-group">
-                <input type="hidden" asp-for="Id_Transp" class="form-control" />
-                <span asp-validation-for="Id_Transp" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Tipo_Transp" class="control-label"></label>
+                <label asp-for="Tipo_Transp"></label>
                 <input asp-for="Tipo_Transp" class="form-control" />
-                <span asp-validation-for="Tipo_Transp" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label for="UF_Estado">Estado:</label>
-                <select name="UF_Estado" id="UF_Estado" class="form-control" asp-items="@ViewBag.Estados">
+                <label>Estado:</label>
+                <select asp-for="UF_Estado" class="form-control" asp-items="@ViewBag.Estados">
                     <option value="">-- Selecione um Estado --</option>
                 </select>
             </div>
@@ -41,7 +31,7 @@
             <div class="botoes">
                 <input type="submit" value="Alterar" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-outline-dark">Voltar para Transporte</a>
-                <a asp-area="" asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Voltar ao Menu Principal</a>
+                <a asp-controller="Home" asp-action="MenuSistema" class="btn btn-outline-dark">Menu Principal</a>
             </div>
         </form>
     </div>

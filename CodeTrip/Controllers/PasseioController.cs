@@ -12,22 +12,17 @@ namespace CodeTrip.Controllers
         {
             _repositorio = repositorio;
         }
-
-        // Lista todos os passeios
         public IActionResult Index()
         {
             var passeios = _repositorio.TodosPasseios();
             return View(passeios);
         }
 
-        // FORMULÁRIO DE CADASTRO
-        // GET: Passeio/CadastrarPasseio
         public IActionResult CadastrarPasseio()
         {
-            return View(); // View: CadastrarPasseio.cshtml
+            return View();
         }
 
-        // POST: Passeio/CadastrarPasseio
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CadastrarPasseio(Passeio passeio)
@@ -38,21 +33,18 @@ namespace CodeTrip.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(passeio); // Retorna à mesma view se houver erro
+            return View(passeio);
         }
 
-        // FORMULÁRIO DE EDIÇÃO
-        // GET: Passeio/EditarPasseio/{id}
         public IActionResult EditarPasseio(int id)
         {
             var passeio = _repositorio.ObterPasseio(id);
             if (passeio == null)
                 return NotFound();
 
-            return View(passeio); // View: EditarPasseio.cshtml
+            return View(passeio);
         }
 
-        // POST: Passeio/EditarPasseio/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditarPasseio(int id, Passeio passeio)
@@ -66,10 +58,9 @@ namespace CodeTrip.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(passeio); // Retorna à mesma view se houver erro
+            return View(passeio);
         }
 
-        // EXCLUIR PASSEIO
         public IActionResult Excluir(int id)
         {
             _repositorio.Excluir(id);
