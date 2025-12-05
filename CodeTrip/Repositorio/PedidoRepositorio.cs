@@ -1,17 +1,18 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
 using CodeTrip.Models;
-using static Mysqlx.Expect.Open.Types.Condition.Types;
-using MySqlX.XDevAPI;
-using Mysqlx.Crud;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Collections.Generic;
 
 namespace CodeTrip.Repositorio
 {
-    public class PedidoRepositorio(IConfiguration configuration)
+    public class PedidoRepositorio
     {
-        private readonly string _conexaoMySQL = configuration.GetConnectionString("ConexaoMySQL");
+        private readonly string _conexaoMySQL;
+
+        public PedidoRepositorio(IConfiguration configuration)
+        {
+            _conexaoMySQL = configuration.GetConnectionString("ConexaoMySQL");
+        }
 
         public void Cadastrar(Pedido pedido)
         {
@@ -24,18 +25,19 @@ namespace CodeTrip.Repositorio
                     conexao
                 );
 
-                cmd.Parameters.Add("@Id_Usuario", MySqlDbType.Int32).Value = pedido.Id_Usuario;
-                cmd.Parameters.Add("@CPF_Cli", MySqlDbType.VarChar).Value = pedido.CPF_Cli;
-                cmd.Parameters.Add("@Id_Origem", MySqlDbType.Int32).Value = pedido.Id_Origem;
-                cmd.Parameters.Add("@Id_Destino", MySqlDbType.Int32).Value = pedido.Id_Destino;
-                cmd.Parameters.Add("@Data_Inicio", MySqlDbType.Date).Value = pedido.Data_Inicio;
-                cmd.Parameters.Add("@Data_Fim", MySqlDbType.Date).Value = pedido.Data_Fim;
-                cmd.Parameters.Add("@Id_Transp", MySqlDbType.Int32).Value = pedido.Id_Transp;
-                cmd.Parameters.Add("@Id_End_Transporte", MySqlDbType.Int32).Value = pedido.Id_End_Transporte;
-                cmd.Parameters.Add("@Id_Hospedagem", MySqlDbType.Int32).Value = pedido.Id_Hospedagem;
-                cmd.Parameters.Add("@Id_Pagamento", MySqlDbType.Int32).Value = pedido.Id_Pagamento;
-                cmd.Parameters.Add("@Id_Passeio", MySqlDbType.Int32).Value = pedido.Id_Passeio;
-                cmd.Parameters.Add("@Ativo", MySqlDbType.Bit).Value = pedido.Ativo;
+                cmd.Parameters.AddWithValue("@Id_Usuario", pedido.Id_Usuario);
+                cmd.Parameters.AddWithValue("@CPF_Cli", pedido.CPF_Cli);
+                cmd.Parameters.AddWithValue("@Id_Origem", pedido.Id_Origem);
+                cmd.Parameters.AddWithValue("@Id_Destino", pedido.Id_Destino);
+                cmd.Parameters.AddWithValue("@Data_Inicio", pedido.Data_Inicio);
+                cmd.Parameters.AddWithValue("@Data_Fim", pedido.Data_Fim);
+                cmd.Parameters.AddWithValue("@Id_Transp", pedido.Id_Transp);
+                cmd.Parameters.AddWithValue("@Id_End_Transporte", pedido.Id_End_Transporte);
+                cmd.Parameters.AddWithValue("@Id_Hospedagem", pedido.Id_Hospedagem);
+                cmd.Parameters.AddWithValue("@Id_Pagamento", pedido.Id_Pagamento);
+                cmd.Parameters.AddWithValue("@Id_Passeio", pedido.Id_Passeio);
+                cmd.Parameters.AddWithValue("@Ativo", pedido.Ativo);
+
                 cmd.ExecuteNonQuery();
                 conexao.Close();
             }
@@ -56,19 +58,19 @@ namespace CodeTrip.Repositorio
                         conexao
                     );
 
-                    cmd.Parameters.Add("@Id_Pedido", MySqlDbType.Int32).Value = pedido.Id_Pedido;
-                    cmd.Parameters.Add("@Id_Usuario", MySqlDbType.Int32).Value = pedido.Id_Usuario;
-                    cmd.Parameters.Add("@CPF_Cli", MySqlDbType.VarChar).Value = pedido.CPF_Cli;
-                    cmd.Parameters.Add("@Id_Origem", MySqlDbType.Int32).Value = pedido.Id_Origem;
-                    cmd.Parameters.Add("@Id_Destino", MySqlDbType.Int32).Value = pedido.Id_Destino;
-                    cmd.Parameters.Add("@Data_Inicio", MySqlDbType.Date).Value = pedido.Data_Inicio;
-                    cmd.Parameters.Add("@Data_Fim", MySqlDbType.Date).Value = pedido.Data_Fim;
-                    cmd.Parameters.Add("@Id_Transp", MySqlDbType.Int32).Value = pedido.Id_Transp;
-                    cmd.Parameters.Add("@Id_End_Transporte", MySqlDbType.Int32).Value = pedido.Id_End_Transporte;
-                    cmd.Parameters.Add("@Id_Hospedagem", MySqlDbType.Int32).Value = pedido.Id_Hospedagem;
-                    cmd.Parameters.Add("@Id_Pagamento", MySqlDbType.Int32).Value = pedido.Id_Pagamento;
-                    cmd.Parameters.Add("@Id_Passeio", MySqlDbType.Int32).Value = pedido.Id_Passeio;
-                    cmd.Parameters.Add("@Ativo", MySqlDbType.Bit).Value = pedido.Ativo;
+                    cmd.Parameters.AddWithValue("@Id_Pedido", pedido.Id_Pedido);
+                    cmd.Parameters.AddWithValue("@Id_Usuario", pedido.Id_Usuario);
+                    cmd.Parameters.AddWithValue("@CPF_Cli", pedido.CPF_Cli);
+                    cmd.Parameters.AddWithValue("@Id_Origem", pedido.Id_Origem);
+                    cmd.Parameters.AddWithValue("@Id_Destino", pedido.Id_Destino);
+                    cmd.Parameters.AddWithValue("@Data_Inicio", pedido.Data_Inicio);
+                    cmd.Parameters.AddWithValue("@Data_Fim", pedido.Data_Fim);
+                    cmd.Parameters.AddWithValue("@Id_Transp", pedido.Id_Transp);
+                    cmd.Parameters.AddWithValue("@Id_End_Transporte", pedido.Id_End_Transporte);
+                    cmd.Parameters.AddWithValue("@Id_Hospedagem", pedido.Id_Hospedagem);
+                    cmd.Parameters.AddWithValue("@Id_Pagamento", pedido.Id_Pagamento);
+                    cmd.Parameters.AddWithValue("@Id_Passeio", pedido.Id_Passeio);
+                    cmd.Parameters.AddWithValue("@Ativo", pedido.Ativo);
 
                     int linhasAfetadas = cmd.ExecuteNonQuery();
                     return linhasAfetadas > 0;
@@ -88,32 +90,31 @@ namespace CodeTrip.Repositorio
             {
                 conexao.Open();
 
-                // Query modificada com JOINs para trazer os dados relacionados
                 string query = @"
-            SELECT 
-                p.*,
-                u.Nome_Usuario,
-                c.Nome_Cli,
-                ov.Cidade_Nome as Origem_Cidade,
-                ov.UF_Estado as Origem_UF,
-                dv.Desc_Destino as Destino_Desc,
-                dv.Cidade_Nome as Destino_Cidade,
-                dv.UF_Estado as Destino_UF,
-                t.Tipo_Transp,
-                et.Logradouro_End_Transporte,
-                h.Nome_Hospedagem,
-                pg.Desc_Pagamento,
-                ps.Nome_Passeio
-            FROM Pedido p
-            LEFT JOIN Usuario u ON p.Id_Usuario = u.Id_Usuario
-            LEFT JOIN Cliente c ON p.CPF_Cli = c.CPF_Cli
-            LEFT JOIN Origem_Viagem ov ON p.Id_Origem = ov.Id_Origem
-            LEFT JOIN Destino_Viagem dv ON p.Id_Destino = dv.Id_Destino
-            LEFT JOIN Transporte t ON p.Id_Transp = t.Id_Transp
-            LEFT JOIN End_Transporte et ON p.Id_End_Transporte = et.Id_End_Transporte
-            LEFT JOIN Hospedagem h ON p.Id_Hospedagem = h.Id_Hospedagem
-            LEFT JOIN Pagamento pg ON p.Id_Pagamento = pg.Id_Pagamento
-            LEFT JOIN Passeio ps ON p.Id_Passeio = ps.Id_Passeio";
+                    SELECT 
+                        p.*,
+                        u.Nome_Usuario,
+                        c.Nome_Cli,
+                        ov.Cidade_Nome as Origem_Cidade,
+                        ov.UF_Estado as Origem_UF,
+                        dv.Desc_Destino as Destino_Desc,
+                        dv.Cidade_Nome as Destino_Cidade,
+                        dv.UF_Estado as Destino_UF,
+                        t.Tipo_Transp,
+                        et.Logradouro_End_Transporte,
+                        h.Nome_Hospedagem,
+                        pg.Desc_Pagamento,
+                        ps.Nome_Passeio
+                    FROM Pedido p
+                    LEFT JOIN Usuario u ON p.Id_Usuario = u.Id_Usuario
+                    LEFT JOIN Cliente c ON p.CPF_Cli = c.CPF_Cli
+                    LEFT JOIN Origem_Viagem ov ON p.Id_Origem = ov.Id_Origem
+                    LEFT JOIN Destino_Viagem dv ON p.Id_Destino = dv.Id_Destino
+                    LEFT JOIN Transporte t ON p.Id_Transp = t.Id_Transp
+                    LEFT JOIN End_Transporte et ON p.Id_End_Transporte = et.Id_End_Transporte
+                    LEFT JOIN Hospedagem h ON p.Id_Hospedagem = h.Id_Hospedagem
+                    LEFT JOIN Pagamento pg ON p.Id_Pagamento = pg.Id_Pagamento
+                    LEFT JOIN Passeio ps ON p.Id_Passeio = ps.Id_Passeio";
 
                 MySqlCommand cmd = new MySqlCommand(query, conexao);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -128,7 +129,7 @@ namespace CodeTrip.Repositorio
                         {
                             Id_Pedido = Convert.ToInt32(dr["Id_Pedido"]),
                             Id_Usuario = Convert.ToInt32(dr["Id_Usuario"]),
-                            CPF_Cli = ((string)dr["CPF_Cli"]),
+                            CPF_Cli = dr["CPF_Cli"].ToString(),
                             Id_Origem = Convert.ToInt32(dr["Id_Origem"]),
                             Id_Destino = Convert.ToInt32(dr["Id_Destino"]),
                             Data_Inicio = DateOnly.FromDateTime(Convert.ToDateTime(dr["Data_Inicio"])),
@@ -139,7 +140,6 @@ namespace CodeTrip.Repositorio
                             Id_Pagamento = Convert.ToInt32(dr["Id_Pagamento"]),
                             Id_Passeio = Convert.ToInt32(dr["Id_Passeio"]),
                             Ativo = Convert.ToBoolean(dr["Ativo"]),
-                            // Novas propriedades para exibição
                             Nome_Usuario = dr["Nome_Usuario"] != DBNull.Value ? dr["Nome_Usuario"].ToString() : string.Empty,
                             Nome_Cli = dr["Nome_Cli"] != DBNull.Value ? dr["Nome_Cli"].ToString() : string.Empty,
                             Origem_Cidade = dr["Origem_Cidade"] != DBNull.Value ? dr["Origem_Cidade"].ToString() : string.Empty,
@@ -169,7 +169,7 @@ namespace CodeTrip.Repositorio
                 {
                     pedido.Id_Pedido = Convert.ToInt32(dr["Id_Pedido"]);
                     pedido.Id_Usuario = Convert.ToInt32(dr["Id_Usuario"]);
-                    pedido.CPF_Cli = ((string)dr["CPF_Cli"]);
+                    pedido.CPF_Cli = dr["CPF_Cli"].ToString();
                     pedido.Id_Origem = Convert.ToInt32(dr["Id_Origem"]);
                     pedido.Id_Destino = Convert.ToInt32(dr["Id_Destino"]);
                     pedido.Data_Inicio = DateOnly.FromDateTime(Convert.ToDateTime(dr["Data_Inicio"]));
@@ -193,7 +193,7 @@ namespace CodeTrip.Repositorio
                 conexao.Open();
                 MySqlCommand cmd = new MySqlCommand("DELETE FROM Pedido WHERE Id_Pedido=@id", conexao);
                 cmd.Parameters.AddWithValue("@id", id);
-                int i = cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
                 conexao.Close();
             }
         }
@@ -204,7 +204,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT id_Usuario, nome_Usuario from Usuario";
+                string query = "SELECT Id_Usuario, Nome_Usuario FROM Usuario WHERE Ativo = 1";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -229,7 +229,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Nome_Cli, CPF_Cli from Cliente";
+                string query = "SELECT Nome_Cli, CPF_Cli, Email_Cli FROM Cliente WHERE ativo = 1";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -239,7 +239,8 @@ namespace CodeTrip.Repositorio
                             lista.Add(new Cliente
                             {
                                 Nome_Cli = reader.GetString("Nome_Cli"),
-                                CPF_Cli = reader.GetString("CPF_Cli")
+                                CPF_Cli = reader.GetString("CPF_Cli"),
+                                Email_Cli = reader.GetString("Email_Cli")
                             });
                         }
                     }
@@ -254,7 +255,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_Transp, Tipo_Transp, UF_Estado from Transporte";
+                string query = "SELECT Id_Transp, Tipo_Transp, UF_Estado FROM Transporte";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -280,7 +281,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_End_Transporte, Logradouro_End_Transporte, Numero_End_Transporte, Cidade_Nome, UF_Estado from End_Transporte";
+                string query = "SELECT Id_End_Transporte, Logradouro_End_Transporte, Numero_End_Transporte, Cidade_Nome, UF_Estado FROM End_Transporte";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -308,7 +309,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_Hospedagem, Nome_Hospedagem from Hospedagem";
+                string query = "SELECT Id_Hospedagem, Nome_Hospedagem FROM Hospedagem";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -333,7 +334,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_Pagamento, Desc_Pagamento from Pagamento";
+                string query = "SELECT Id_Pagamento, Desc_Pagamento FROM Pagamento";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -358,7 +359,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_Origem, Cidade_Nome, UF_Estado from Origem_Viagem";
+                string query = "SELECT Id_Origem, Cidade_Nome, UF_Estado FROM Origem_Viagem";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -384,7 +385,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_Destino, Desc_Destino, Cidade_Nome, UF_Estado from Destino_Viagem";
+                string query = "SELECT Id_Destino, Desc_Destino, Cidade_Nome, UF_Estado FROM Destino_Viagem";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())
@@ -411,7 +412,7 @@ namespace CodeTrip.Repositorio
             using (MySqlConnection conexao = new MySqlConnection(_conexaoMySQL))
             {
                 conexao.Open();
-                string query = "SELECT Id_Passeio, Nome_Passeio, Cidade_Nome, UF_Estado from Passeio WHERE Ativo = 1";
+                string query = "SELECT Id_Passeio, Nome_Passeio, Cidade_Nome, UF_Estado FROM Passeio WHERE Ativo = 1";
                 using (MySqlCommand comando = new MySqlCommand(query, conexao))
                 {
                     using (MySqlDataReader reader = comando.ExecuteReader())

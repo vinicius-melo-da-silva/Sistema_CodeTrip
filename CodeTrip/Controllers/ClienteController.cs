@@ -2,9 +2,11 @@
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CodeTrip.Filters;
 
 namespace CodeTrip.Controllers
 {
+    [SessionAuthorize(RoleAnyOf = "Admin,Colaborador")]
     public class ClienteController : Controller
     {
         private readonly ClienteRepositorio _clienteRepositorio;

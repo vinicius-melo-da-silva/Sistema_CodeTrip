@@ -1,0 +1,411 @@
+﻿/* ===== VARIÁVEIS DE CORES (BASEADO NO SEU TEMA) ===== */
+:root {
+    --primary-blue: #1e40af;
+    --secondary-blue: #3b82f6;
+    --light-blue: #dbeafe;
+    --dark-blue: #1e3a8a;
+    --accent-green: #10b981;
+    --light-green: #d1fae5;
+    --accent-red: #ef4444;
+    --light-red: #fee2e2;
+    --white: #ffffff;
+    --gray-light: #f8fafc;
+    --gray-medium: #e2e8f0;
+    --gray-dark: #64748b;
+    --text-dark: #1e293b;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== RESET E ESTILOS GERAIS ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 50%, var(--light-green) 100%);
+    min-height: 100vh;
+    color: var(--text-dark);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.acesso-negado-container {
+    background: var(--white);
+    border-radius: 24px;
+    box-shadow: var(--shadow-xl);
+    padding: 50px 40px;
+    text-align: center;
+    max-width: 680px;
+    width: 100%;
+    animation: fadeInUp 0.8s ease-out;
+    border: 1px solid var(--gray-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+    .acesso-negado-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-red) 100%);
+        border-radius: 24px 24px 0 0;
+    }
+
+/* ===== ÍCONE PRINCIPAL ===== */
+.icon-container {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+    .icon-container i {
+        font-size: 100px;
+        color: var(--accent-red);
+        animation: pulseRed 2s infinite;
+        filter: drop-shadow(0 4px 6px rgba(239, 68, 68, 0.2));
+    }
+
+/* ===== LOGO ===== */
+.logo {
+    height: 50px;
+    margin-bottom: 20px;
+    filter: brightness(0) saturate(100%) invert(25%) sepia(80%) saturate(2000%) hue-rotate(215deg) brightness(90%) contrast(90%);
+}
+
+/* ===== TÍTULO ===== */
+h1 {
+    color: var(--primary-blue);
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    font-weight: 800;
+    position: relative;
+    display: inline-block;
+}
+
+    h1::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-red) 100%);
+        border-radius: 2px;
+    }
+
+/* ===== MENSAGEM ===== */
+.message {
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+    .message strong {
+        color: var(--primary-blue);
+    }
+
+/* ===== DETALHES DO USUÁRIO ===== */
+.details {
+    background: var(--gray-light);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 30px;
+    text-align: left;
+    border-left: 4px solid var(--secondary-blue);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--gray-medium);
+}
+
+    .details p {
+        margin-bottom: 15px;
+        color: var(--text-dark);
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .details i {
+        color: var(--secondary-blue);
+        font-size: 1.2rem;
+        min-width: 24px;
+    }
+
+.user-role {
+    font-weight: 700;
+    color: var(--primary-blue);
+    background: var(--light-blue);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-left: 5px;
+}
+
+/* ===== INFORMAÇÕES DE PERFIL ===== */
+.role-info {
+    margin-top: 25px;
+    font-size: 0.95rem;
+    color: var(--gray-dark);
+    padding: 20px;
+    background: var(--light-blue);
+    border-radius: 12px;
+    text-align: left;
+    border: 1px solid var(--gray-medium);
+    margin-bottom: 30px;
+}
+
+    .role-info i {
+        color: var(--primary-blue);
+        margin-right: 10px;
+    }
+
+    .role-info strong {
+        color: var(--primary-blue);
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .role-info ul {
+        list-style: none;
+        padding-left: 5px;
+    }
+
+    .role-info li {
+        margin-bottom: 8px;
+        padding-left: 10px;
+        position: relative;
+    }
+
+        .role-info li::before {
+            content: '•';
+            color: var(--secondary-blue);
+            font-size: 1.5rem;
+            position: absolute;
+            left: -10px;
+            top: -5px;
+        }
+
+/* ===== GRUPO DE BOTÕES ===== */
+.button-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    min-width: 200px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+    color: var(--white);
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+    }
+
+.btn-secondary {
+    background: linear-gradient(135deg, var(--gray-light) 0%, var(--gray-medium) 100%);
+    color: var(--text-dark);
+    border: 1px solid var(--gray-medium);
+}
+
+    .btn-secondary:hover {
+        background: linear-gradient(135deg, var(--gray-medium) 0%, #d1d5db 100%);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-xl);
+    }
+
+.btn i {
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseRed {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 4px 6px rgba(239, 68, 68, 0.2));
+    }
+
+    50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 6px 10px rgba(239, 68, 68, 0.3));
+    }
+
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 4px 6px rgba(239, 68, 68, 0.2));
+    }
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+    .acesso-negado-container {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .icon-container i {
+        font-size: 80px;
+    }
+
+    .message {
+        font-size: 1.1rem;
+    }
+
+    .details {
+        padding: 20px;
+    }
+
+        .details p {
+            font-size: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+    .button-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        min-width: auto;
+        padding: 14px 24px;
+    }
+
+    .role-info {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .icon-container i {
+        font-size: 60px;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .message {
+        font-size: 1rem;
+        padding: 0;
+    }
+
+    .details {
+        padding: 15px;
+    }
+
+    .role-info {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* ===== EFEITOS ADICIONAIS ===== */
+.acesso-negado-container:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transition: box-shadow 0.3s ease;
+}
+
+.btn:active {
+    transform: translateY(-2px);
+    transition: transform 0.1s ease;
+}
+
+/* ===== ESTILOS PARA DESTAQUES ===== */
+strong {
+    color: var(--primary-blue);
+}
+
+/* ===== DECORAÇÃO ADICIONAL ===== */
+.acesso-negado-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+    z-index: -1;
+}

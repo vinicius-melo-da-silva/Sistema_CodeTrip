@@ -4,14 +4,12 @@
 </header>
 
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema CodeTrip</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
     <!-- Menu Fixo Superior -->
     <div class="menu-fixo">
@@ -20,12 +18,31 @@
                 <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip">
                 <div class="sistema-titulo">Sistema de Gestão</div>
             </div>
-            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                <i class="fas fa-sign-out-alt"></i> Sair do Sistema
-            </a>
-            <a class="nav-link" asp-area="" asp-controller="Usuario" asp-action="Login">
-                <i class="fas fa-sign-out-alt"></i> Login
-            </a>
+
+            @{
+                var userId = Context.Session.GetInt32("UserId");
+                var userRole = Context.Session.GetString("UserRole");
+                var userName = Context.Session.GetString("UserName");
+            }
+
+            @if (userId != null)
+            {
+                <div class="user-info">
+                    <span>Olá, @userName!</span>
+                </div>
+                <form asp-controller="Auth" asp-action="Logout" method="post" style="display:inline;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="nav-link" style="background:none; border:none; color:white; cursor:pointer;">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </form>
+            }
+            else
+            {
+                <a class="nav-link" asp-controller="Auth" asp-action="Login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            }
         </div>
     </div>
 
@@ -34,9 +51,18 @@
         <h1>Explore o Mundo com a CodeTrip</h1>
         <p>Destinos inteligentes, experiências inesquecíveis. Oferecemos os melhores serviços para tornar sua viagem perfeita.</p>
         <div class="hero-buttons">
-            <a asp-area="" asp-controller="Pedido" asp-action="CadastrarPedido" class="btn btn-primary">
-                <i class="fas fa-plus-circle"></i> Nova Viagem
-            </a>
+            @if (userId != null)
+            {
+                <a asp-controller="Pedido" asp-action="CadastrarPedido" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Nova Viagem
+                </a>
+            }
+            else
+            {
+                <a asp-controller="Auth" asp-action="Login" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Faça Login para Agendar
+                </a>
+            }
         </div>
     </section>
 
@@ -44,50 +70,69 @@
     <section class="funcionalidades">
         <h2>Funcionalidades do Sistema</h2>
         <div class="botoes-grid">
-            <div class="funcionalidade-card">
-                <i class="fas fa-users"></i>
-                <h3>Gestão de Clientes</h3>
-                <p>Sistema completo para cadastro e gerenciamento de clientes, mantendo todas as informações organizadas.</p>
-                <a asp-area="" asp-controller="Cliente" asp-action="Index" class="btn-card">Acessar</a>
-            </div>
+            @if (userId != null && (userRole == "Colaborador" || userRole == "Admin"))
+            {
+                <div class="funcionalidade-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Gestão de Clientes</h3>
+                    <p>Sistema completo para cadastro e gerenciamento de clientes, mantendo todas as informações organizadas.</p>
+                    <a asp-controller="Cliente" asp-action="Index" class="btn-card">Acessar</a>
+                </div>
+            }
 
-            <div class="funcionalidade-card">
-                <i class="fas fa-hotel"></i>
-                <h3>Hospedagens</h3>
-                <p>Controle completo de hospedagens, tipos de acomodação e serviços oferecidos aos clientes.</p>
-                <a asp-area="" asp-controller="Hospedagem" asp-action="Index" class="btn-card">Acessar</a>
-            </div>
+            @if (userId != null && (userRole == "Colaborador" || userRole == "Admin"))
+            {
+                <div class="funcionalidade-card">
+                    <i class="fas fa-hotel"></i>
+                    <h3>Hospedagens</h3>
+                    <p>Controle completo de hospedagens, tipos de acomodações e serviços oferecidos aos clientes.</p>
+                    <a asp-controller="Hospedagem" asp-action="Index" class="btn-card">Acessar</a>
+                </div>
+            }
 
-            <div class="funcionalidade-card">
-                <i class="fas fa-bus"></i>
-                <h3>Transportes</h3>
-                <p>Gerencie diferentes tipos de transporte com preços, capacidades e disponibilidade para suas viagens.</p>
-                <a asp-area="" asp-controller="Transporte" asp-action="Index" class="btn-card">Acessar</a>
-            </div>
+            @if (userId != null && (userRole == "Colaborador" || userRole == "Admin"))
+            {
+                <div class="funcionalidade-card">
+                    <i class="fas fa-bus"></i>
+                    <h3>Transportes</h3>
+                    <p>Gerencie diferentes tipos de transporte com preços, capacidades e disponibilidade para suas viagens.</p>
+                    <a asp-controller="Transporte" asp-action="Index" class="btn-card">Acessar</a>
+                </div>
+            }
 
-            <div class="funcionalidade-card">
-                <i class="fas fa-map-marked-alt"></i>
-                <h3>Passeios</h3>
-                <p>Organize e gerencie passeios e excursões com informações detalhadas e valores.</p>
-                <a asp-area="" asp-controller="Passeio" asp-action="Index" class="btn-card">Acessar</a>
-            </div>
+            @if (userId != null && (userRole == "Colaborador" || userRole == "Admin"))
+            {
+                <div class="funcionalidade-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Passeios</h3>
+                    <p>Organize e gerencie passeios e excursões com informações detalhadas e valores.</p>
+                    <a asp-controller="Passeio" asp-action="Index" class="btn-card">Acessar</a>
+                </div>
+            }
 
-            <div class="funcionalidade-card">
-                <i class="fas fa-shopping-cart"></i>
-                <h3>Pedidos</h3>
-                <p>Controle completo de pedidos, desde a criação até o acompanhamento do status de cada viagem.</p>
-                <a asp-area="" asp-controller="Pedido" asp-action="Index" class="btn-card">Acessar</a>
-            </div>
+            @if (userId != null)
+            {
+                <div class="funcionalidade-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Pedidos</h3>
+                    <p>Controle completo de pedidos, desde a criação até o acompanhamento do status de cada viagem.</p>
+                    <a asp-controller="Pedido" asp-action="Index" class="btn-card">Acessar</a>
+                </div>
+            }
 
-            <div class="funcionalidade-card">
-                <i class="fas fa-chart-bar"></i>
-                <h3>Indicadores</h3>
-                <p>Acompanhe métricas importantes, relatórios e desempenho do seu negócio em tempo real.</p>
-                <a asp-area="" asp-controller="Indicadores" asp-action="Index" class="btn-card">Acessar</a>
-            </div>
+            @if (userId != null && userRole == "Admin")
+            {
+                <div class="funcionalidade-card">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Indicadores</h3>
+                    <p>Acompanhe métricas importantes, relatórios e desempenho do seu negócio em tempo real.</p>
+                    <a asp-controller="Indicadores" asp-action="Index" class="btn-card">Acessar</a>
+                </div>
+            }
         </div>
     </section>
 
+    <!-- Restante do código permanece igual -->
     <!-- Seção de Números -->
     <section class="numeros">
         <h2>Nossos Números</h2>
@@ -131,10 +176,9 @@
                     Sistema completo de gerenciamento para agências de viagens, oferecendo controle total sobre clientes, viagens e transportes.
                     Permite o acompanhamento de pedidos, integração com origens e destinos e gestão detalhada de usuários.
                     Facilita o processo de criação, edição e monitoramento de roteiros, garantindo maior agilidade e organização.
-                    Suporte a relatórios, automação de processos e análise estratégica para tomada de decisões eficientes..
+                    Suporte a relatórios, automação de processos e análise estratégica para tomada de decisões eficientes.
                 </p>
             </div>
-
         </div>
 
         <div class="footer-bottom">
@@ -143,5 +187,4 @@
         </div>
     </footer>
 </body>
-
 </html>

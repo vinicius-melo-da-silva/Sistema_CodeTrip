@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
+using CodeTrip.Filters;
 
 namespace CodeTrip.Controllers
 {
+    [SessionAuthorize(RoleAnyOf = "Admin,Colaborador")]
     public class PasseioController : Controller
     {
         private readonly PasseioRepositorio _repositorio;
@@ -12,12 +14,12 @@ namespace CodeTrip.Controllers
         {
             _repositorio = repositorio;
         }
+
         public IActionResult Index()
         {
             var passeios = _repositorio.TodosPasseios();
             return View(passeios);
         }
-
         public IActionResult CadastrarPasseio()
         {
             return View();

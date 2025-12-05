@@ -2,9 +2,11 @@
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CodeTrip.Filters;
 
 namespace CodeTrip.Controllers
 {
+    [SessionAuthorize(RoleAnyOf = "Admin,Colaborador")]
     public class HospedagemController : Controller
     {
         private readonly HospedagemRepositorio _hospedagemRepositorio;
@@ -26,6 +28,7 @@ namespace CodeTrip.Controllers
         }
 
         [HttpPost]
+
         public IActionResult CadastrarHospedagem(Hospedagem hospedagem)
         {
             if (ModelState.IsValid)

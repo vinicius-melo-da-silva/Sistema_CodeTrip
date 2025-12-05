@@ -27,6 +27,10 @@ namespace CodeTrip.Controllers
             {
                 if (usuario.Senha_Usuario == Senha_Usuario)
                 {
+                    // ✔ Salvar na sessão
+                    HttpContext.Session.Set("usuarioLogado", usuario);
+
+                    // ✔ Se ainda quiser usar TempData:
                     TempData["NomeUsuario"] = usuario.Nome_Usuario;
                     TempData["Role"] = usuario.Role;
 
@@ -62,7 +66,5 @@ namespace CodeTrip.Controllers
 
             return View(usuario);
         }
-
-
     }
 }

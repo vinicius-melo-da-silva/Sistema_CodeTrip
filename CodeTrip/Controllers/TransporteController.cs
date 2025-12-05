@@ -2,9 +2,11 @@
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CodeTrip.Filters;
 
 namespace CodeTrip.Controllers
 {
+    [SessionAuthorize(RoleAnyOf = "Admin,Colaborador")]
     public class TransporteController : Controller
     {
         private readonly TransporteRepositorio _transporteRepositorio;
@@ -77,6 +79,7 @@ namespace CodeTrip.Controllers
             return View(transporte);
         }
 
+        [SessionAuthorize(RoleAnyOf = "Admin")]
         public IActionResult ExcluirTransporte(int id)
         {
             _transporteRepositorio.Excluir(id);

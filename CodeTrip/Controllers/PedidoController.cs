@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CodeTrip.Filters;
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
-using MySqlX.XDevAPI;
-using MySql.Data.MySqlClient;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Reflection.PortableExecutable;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CodeTrip.Controllers
 {
+    [SessionAuthorize(RoleAnyOf = "Comum,Admin,Colaborador")]
     public class PedidoController : Controller
     {
         private readonly PedidoRepositorio _pedidoRepositorio;
@@ -19,7 +21,31 @@ namespace CodeTrip.Controllers
 
         public IActionResult Index()
         {
-            return View(_pedidoRepositorio.TodosPedidos());
+            var usuarioLogado = HttpContext.Session.Get<Usuario>("usuarioLogado");
+
+            if (usuarioLogado == null)
+            {
+                return RedirectToAction("MenuSistema", "Home");
+            }
+
+            if (usuarioLogado.Role == "Comum")
+            {
+                var todosClientes = _pedidoRepositorio.Clientes();
+                var cliente = todosClientes?.FirstOrDefault(c => c.Email_Cli == usuarioLogado.Email_Usuario);
+
+                if (cliente == null)
+                {
+                    return View(new List<Pedido>());
+                }
+
+                var todosPedidos = _pedidoRepositorio.TodosPedidos();
+                var pedidosFiltrados = todosPedidos?.Where(p => p.CPF_Cli == cliente.CPF_Cli).ToList();
+                return View(pedidosFiltrados ?? new List<Pedido>());
+            }
+            else
+            {
+                return View(_pedidoRepositorio.TodosPedidos());
+            }
         }
 
         public IActionResult CadastrarPedido()

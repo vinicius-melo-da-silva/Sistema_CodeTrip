@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Acesso Negado";
+    Layout = null; // Página independente, sem layout
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CodeTrip</title>
+    <link href="~/css/AcessoNegado.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="acesso-negado-container">
+        <div class="icon-container">
+            <i class="fas fa-ban"></i>
+        </div>
+
+        <h1>Acesso Negado</h1>
+
+        <div class="message">
+            <img src="~/src/imagens/logo_nome.png" alt="Logo Codetrip" class="logo" />
+            <p>Você não tem permissão para acessar esta página.</p>
+            <p>Esta funcionalidade está restrita a determinados perfis de usuário.</p>
+        </div>
+
+        <div class="details">
+            <p><i class="fas fa-info-circle"></i> <strong>Usuário atual:</strong> <span>@Context.Session.GetString("UserName")</span></p>
+            <p>
+                <i class="fas fa-user-tag"></i> <strong>Perfil:</strong>
+                @{
+                    var role = Context.Session.GetString("UserRole");
+                    var roleName = role switch
+                    {
+                        "Comum" => "Usuário Comum",
+                        "Colaborador" => "Colaborador",
+                        "Admin" => "Administrador",
+                        _ => "Não identificado"
+                    };
+                }
+                <span class="user-role">@roleName</span>
+            </p>
+            <p><i class="fas fa-envelope"></i> <strong>E-mail:</strong> <span>@Context.Session.GetString("UserEmail")</span></p>
+        </div>
+
+        <div class="button-group">
+            <a href="@Url.Action("MenuSistema", "Home")" class="btn btn-primary">
+                <i class="fas fa-home"></i> Voltar para Home
+            </a>
+
+            <form asp-controller="Usuario" asp-action="Login" method="post" style="display: inline;">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Login
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
