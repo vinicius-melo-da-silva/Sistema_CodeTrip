@@ -1,4 +1,5 @@
-﻿using CodeTrip.Filters;
+﻿using CodeTrip.Autenticacao;
+using CodeTrip.Filters;
 using CodeTrip.Models;
 using CodeTrip.Repositorio;
 using Microsoft.AspNetCore.Http;
@@ -21,17 +22,20 @@ namespace CodeTrip.Controllers
 
         public IActionResult Index()
         {
-            var usuarioLogado = HttpContext.Session.Get<Usuario>("usuarioLogado");
+            var usuarioLogado = HttpContext.Session.GetString(SessionKeys.UserEmail);
+            var role = HttpContext.Session.GetString(SessionKeys.UserRole);
+            var email = HttpContext.Session.GetString(SessionKeys.UserEmail);
 
             if (usuarioLogado == null)
             {
                 return RedirectToAction("MenuSistema", "Home");
             }
 
-            if (usuarioLogado.Role == "Comum")
+            if (role == "Comum")
             {
                 var todosClientes = _pedidoRepositorio.Clientes();
-                var cliente = todosClientes?.FirstOrDefault(c => c.Email_Cli == usuarioLogado.Email_Usuario);
+
+                var cliente = todosClientes?.FirstOrDefault(c => c.Email_Cli == email);
 
                 if (cliente == null)
                 {
